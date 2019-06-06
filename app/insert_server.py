@@ -1,3 +1,5 @@
+from prometheus_client import start_http_server, Metric, REGISTRY
+
 class PromInsertServer:
     def __init__(self, port=8000):
         """Start the http server for scraping
