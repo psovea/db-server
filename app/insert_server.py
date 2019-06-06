@@ -13,7 +13,11 @@ class PromInsertServer:
             - targets: ['localhost:8000']
         """
         start_http_server(port)
-        self.data = []
+        # keep data for scrape_interval * scrape_amount
+        # (scrape_interval is found in /etc/prometheus/prometheus.yml, when writing it is 5)
+        self.scrape_amount = 60
+        self.scrape_count = self.scrape_amount // 2
+        self.data = [[] for _ in range(60)]
         REGISTRY.register(self)
 
     def collect(self):
@@ -21,13 +25,14 @@ class PromInsertServer:
         when multiple series with the same labels are updated, only takes the
         latest one
         """
-        for metric_name, value, labels, info, type_metric in self.data:
-            metric = Metric(metric_name, info, type_metric)
-            metric.add_sample(metric_name,
-                              value=float(value), labels=labels)
-            yield metric
-        print("data collected")
-        self.data = []
+        for lst in self.data[self.scrape_count:] + self.data[:self.scrape_count]:
+            for metric_name, value, labels, info, type_metric in lst:
+                metric = Metric(metric_name, info, type_metric)
+                metric.add_sample(metric_name,
+                                  value=float(value), labels=labels)
+                yield metric
+        self.data[self.scrape_count] = []
+        self.scrape_count += 1
 
     def insert_into_prom(self, metric, value, labels, info="", type_metric='gauge'):
         """metric_name is the name of actual metric, should be what the metric represents
@@ -36,5 +41,5 @@ class PromInsertServer:
         info is some info you want to add to the metric (can't find it in port 9090 though)
         type_metric is the type of the metric, e.g. counter, gauge or histogram
         """
-        print("data added")
-        self.data.append((metric, value, labels, info, type_metric))
+        self.data[self.scrape_count].append(
+            (metric, value, labels, info, type_metric))
