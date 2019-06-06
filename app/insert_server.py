@@ -31,8 +31,9 @@ class PromInsertServer:
                 metric.add_sample(metric_name,
                                   value=float(value), labels=labels)
                 yield metric
+        print("scraped:", self.scrape_count)
         self.data[self.scrape_count] = []
-        self.scrape_count += 1
+        self.scrape_count = (self.scrape_count + 1) % self.scrape_amount
 
     def insert_into_prom(self, metric, value, labels, info="", type_metric='gauge'):
         """metric_name is the name of actual metric, should be what the metric represents
