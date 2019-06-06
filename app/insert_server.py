@@ -1,5 +1,5 @@
 class PromInsertServer:
-    def init(self, port=8000):
+    def __init__(self, port=8000):
         """Start the http server for scraping
         The port where you open should be scraped by prometheus
         e.g port 8000 could have:
