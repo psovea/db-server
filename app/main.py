@@ -15,8 +15,8 @@ app = Flask(__name__)
 ###
 @app.route('/', methods=['POST'])
 def main():
-    print(request.get_json())
-    data = json.loads(request.get_json())
+    # print(request.get_json())
+    data = request.get_json()
     for data_point in data:
         meta = data_points['meta']
         metrics = data_points['metrics']
