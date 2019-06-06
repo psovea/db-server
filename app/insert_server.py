@@ -34,5 +34,4 @@ class PromInsertServer:
         info is some info you want to add to the metric (can't find it in port 9090 though)
         type_metric is the type of the metric, e.g. counter, gauge or histogram
         """
-        labels = dict(metric, value)
         self.data.append((metric, value, labels, info, type_metric))
