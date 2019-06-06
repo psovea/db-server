@@ -30,5 +30,6 @@ def main():
             ## TODO: Let API send metric type (gauge? counter?) and process
             ## the metric type in this function.
             server.insert_into_prom(metric_name, value, meta)
+    return "Received!!!"
 
 server = PromInsertServer()
