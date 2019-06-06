@@ -32,6 +32,7 @@ class PromInsertServer:
                                   value=float(value), labels=labels)
                 yield metric
         print("scraped:", self.scrape_count)
+        print(self.data)
         self.data[self.scrape_count] = []
         self.scrape_count = (self.scrape_count - 1) % self.scrape_amount
 
