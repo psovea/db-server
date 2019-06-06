@@ -18,8 +18,8 @@ def main():
     # print(request.get_json())
     data = request.get_json()
     for data_point in data:
-        meta = data_points['meta']
-        metrics = data_points['metrics']
+        meta = data_point['meta']
+        metrics = data_point['metrics']
         for metric_name, value in metrics:
             ## TODO: Let API send metric type (gauge? counter?) and process
             ## the metric type in this function.
