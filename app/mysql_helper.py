@@ -46,3 +46,8 @@ class MysqlConnector:
         if id:
             return id
         return self.insert(table, insert_values)
+
+    def getLineToTypeMapping(self):
+        query = "select transport_lines.external_code, transport_types.name from transport_lines left join transport_types on transport_type_id = transport_types.id"
+        self.cursor.execute(query)
+        return self.cursor.fetchall()

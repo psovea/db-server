@@ -50,3 +50,9 @@ def insert_static():
                 {'external_id': stop_code, 'transport_line_id': transport_line_id, 'order_number': order_number},
                 {'external_id': stop_code, 'transport_line_id': transport_line_id, 'order_number': order_number})
     return "Successfully inserted data into MySQL."
+
+@app.route('/get-line-mapping', methods=['GET'])
+def get_line_mapping():
+    sql = MysqlConnector()
+    dicts = {a:b for a,b in sql.getLineToTypeMapping()}
+    return json.dumps(dicts)
