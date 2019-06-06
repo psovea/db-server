@@ -1,5 +1,6 @@
 from prometheus_client import start_http_server, Metric, REGISTRY
 
+
 class PromInsertServer:
     def __init__(self, port=8000):
         """Start the http server for scraping
@@ -25,6 +26,7 @@ class PromInsertServer:
             metric.add_sample(metric_name,
                               value=float(value), labels=labels)
             yield metric
+        print("data collected")
         self.data = []
 
     def insert_into_prom(self, metric, value, labels, info="", type_metric='gauge'):
@@ -34,4 +36,5 @@ class PromInsertServer:
         info is some info you want to add to the metric (can't find it in port 9090 though)
         type_metric is the type of the metric, e.g. counter, gauge or histogram
         """
+        print("data added")
         self.data.append((metric, value, labels, info, type_metric))

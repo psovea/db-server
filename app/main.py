@@ -19,6 +19,10 @@ app = Flask(__name__)
 # }
 # ]
 ###
+
+server = PromInsertServer()
+
+
 @app.route('/', methods=['POST'])
 def main():
     # print(request.get_json())
@@ -28,9 +32,7 @@ def main():
         meta = data_point['meta']
         metrics = data_point['metrics']
         for metric_name, value in metrics.items():
-            ## TODO: Let API send metric type (gauge? counter?) and process
-            ## the metric type in this function.
+            # TODO: Let API send metric type (gauge? counter?) and process
+            # the metric type in this function.
             server.insert_into_prom(metric_name, value, meta)
     return "Received!!!"
-
-server = PromInsertServer()
