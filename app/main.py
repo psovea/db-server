@@ -15,6 +15,7 @@ app = Flask(__name__)
 ###
 @app.route('/', methods=['POST'])
 def main():
+    print(requests.get_json())
     data = json.loads(request.get_json())
     for data_point in data:
         meta = data_points['meta']
