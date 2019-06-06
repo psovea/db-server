@@ -23,7 +23,7 @@ app = Flask(__name__)
 def main():
     # print(request.get_json())
     data = request.get_json()
-    print("Got data: " + data)
+    print("Got data: " + str(data))
     for data_point in data:
         meta = data_point['meta']
         metrics = data_point['metrics']
