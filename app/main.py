@@ -12,6 +12,12 @@ app = Flask(__name__)
 #     meta: { operator_name: 'GVB', line_number: '22', vehicle_number: '362' }
 #   }
 # ]
+# [
+# {
+# 'metrics': {'punctuality': '0'},
+# 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '362'}
+# }
+# ]
 ###
 @app.route('/', methods=['POST'])
 def main():
@@ -20,7 +26,7 @@ def main():
     for data_point in data:
         meta = data_point['meta']
         metrics = data_point['metrics']
-        for metric_name, value in metrics:
+        for metric_name, value in metrics.items():
             ## TODO: Let API send metric type (gauge? counter?) and process
             ## the metric type in this function.
             server.insert_into_prom(metric_name, value, meta)
