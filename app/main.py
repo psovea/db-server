@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 server = PromInsertServer()
 
-@app.route('/insert_metrics', methods=['POST'])
+@app.route('/insert-metrics', methods=['POST'])
 def insert_metrics():
     data = request.get_json()
     print("Got data: " + str(data))
