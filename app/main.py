@@ -46,7 +46,7 @@ def insert_static():
             for stop in line['stops']:
                 stop_code = stop['stopCode']
                 order_number = stop['orderNumber']
-                sql.getOrInsert('stops',
+                sql.getOrInsert('line_stops',
                 {'external_id': stop_code, 'transport_line_id': transport_line_id, 'order_number': order_number},
                 {'external_id': stop_code, 'transport_line_id': transport_line_id, 'order_number': order_number})
     return "Successfully inserted data into MySQL."
