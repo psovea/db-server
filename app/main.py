@@ -8,6 +8,37 @@ app = Flask(__name__)
 
 server = PromInsertServer()
 
+def make_transport_line(operator_id, line_id, transport_type_id, line_obj):
+    """Returns an object for a transport line to be placed in the db"""
+    return {"operator_id": operator_id,
+            "internal_id": line_id,
+            "public_id": line_obj["lineNumberName"],
+            "name": line_obj["lineName"],
+            "destination_name": line_obj["destinationName"],
+            "direction": line_obj["direction"],
+            "transport_type_id": transport_type_id,
+            "total_stops": line_obj["totalStops"]}
+
+
+def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
+    """ Creates a stop object to be placed in the database """
+    return {"stop_code": stop_id,
+            "lat": lat,
+            "lon": lon,
+            "name": name,
+            "town": town,
+            "area_code": area_code,
+            "accessibility_wheelchair": access_wc,
+            "accessibility_visual": access_vi}
+
+
+def make_transport_line_stop(transport_line_id, stop_id, order):
+    """Returns a transport line stop object to be placed in the database"""
+    return {"transport_line_id": transport_line_id,
+            "stop_id": stop_id,
+            "order_number": order}
+
+
 @app.route('/insert-metrics', methods=['POST'])
 def insert_metrics():
     data = request.get_json()
@@ -20,6 +51,7 @@ def insert_metrics():
             # the metric type in this function.
             server.insert_into_prom(metric_name, value, meta)
     return "Successfully inserted metrics into PrometheusDB."
+
 
 @app.route('/insert-static-stops', methods=['POST'])
 def insert_static_stops():
@@ -35,16 +67,22 @@ def insert_static_stops():
         name = stop["name"]
         town = stop["town"]
         area_code = stop["areaCode"]
-        accessibility_wheelchair = 1 if stop["accessibility"]["wheelchair"] else 0
-        accessibility_visual = 1 if stop["accessibility"]["visual"] else 0 
-        
+
+        # database expects these values to be 1 or 0
+        access_wc = 1 if stop["accessibility"]["wheelchair"] else 0
+        access_vi = 1 if stop["accessibility"]["visual"] else 0
+
+        insertObj = make_stop(stop_id, lat, lon, name, town, area_code,
+                access_wc, access_vi)
+
         try:
-            sql.getOrInsert("stops", {"stop_code": stop_id, "lat": lat, "lon": lon, "name": name, "town": town, "area_code": area_code, "accessibility_wheelchair": accessibility_wheelchair, "accessibility_visual":accessibility_visual}, {"stop_code": stop_id, "lat": lat, "lon": lon, "name": name, "town": town, "area_code": area_code, "accessibility_wheelchair": accessibility_wheelchair, "accessibility_visual":accessibility_visual}) 
+            sql.getOrInsert("stops", insertObj, insertObj)
         except Exception as e:
             print(e)
             print(stop)
 
         return "Great success."
+
 
 @app.route('/insert-static', methods=['POST'])
 def insert_static():
@@ -55,46 +93,33 @@ def insert_static():
 
     for operator in operators:
         sql.getOrInsert("operators", {"name": operator}, {"name": operator})
-        
+
         operator_id = sql.getId("operators", {"name": operator})
-    
+
         for line_id in data[operator].keys():
             line_obj = data[operator][line_id]
-            transport_type_id = sql.getId("transport_types", {"name": line_obj["transportType"]})
+            transport_type_id = sql.getId("transport_types",
+                    {"name": line_obj["transportType"]})
+            transport_line_obj = make_transport_line(operator_id, line_id,
+                    transport_type_id, line_obj)
 
-            try: 
-                sql.getOrInsert("transport_lines", {"operator_id": operator_id, "internal_id": line_id, "public_id": line_obj["lineNumberName"], "name": line_obj["lineName"], "destination_name": line_obj["destinationName"], "direction": line_obj["direction"], "transport_type_id": transport_type_id, "total_stops": line_obj["totalStops"]}, {"operator_id": operator_id, "internal_id": line_id, "public_id": line_obj["lineNumberName"], "name": line_obj["lineName"], "destination_name": line_obj["destinationName"], "direction": line_obj["direction"], "transport_type_id": transport_type_id, "total_stops": line_obj["totalStops"]})
-                    
+            try:
+                sql.getOrInsert("transport_lines", transport_line_obj,
+                        transport_line_obj)
+
+                # connect every stop with a line id
                 for stop in line_obj["stops"]:
-                    stop_id = sql.getId("stops", {"stop_code": stop["stopCode"]})
-                    transport_line_id = sql.getId("transport_lines", {"internal_id": line_id})
+                    stop_id = sql.getId("stops",
+                            {"stop_code": stop["stopCode"]})
+                    transport_line_id = sql.getId("transport_lines",
+                            {"internal_id": line_id})
                     order = stop["orderNumber"]
-                    sql.getOrInsert("transport_lines_stops", {"transport_line_id": transport_line_id, "stop_id": stop_id, "order_number": order}, {"transport_line_id": transport_line_id, "stop_id": stop_id, "order_number": order})
+
+                    sql.getOrInsert("transport_lines_stops",
+                            make_transport_line_stop(transport_line_id,
+                                stop_id, order))
             except Exception as e:
                 print(e)
-#    for operator_name, operator in data.items():
-#        operator_id = sql.getOrInsert(
-#            'operators',
-#            {'name': operator_name},
-#            {'name': operator_name})
-#        for line_code, line in operator.items():
-#            transport_type = line['transportType']
-#            direction = line['direction']
-#            transport_type_id = sql.getOrInsert(
-#                'transport_types',
-#                {'name': transport_type},
-#                {'name': transport_type})
-#            transport_line_id = sql.getOrInsert(
-#                'transport_lines',
-#                {'external_code': line_code, 'transport_type_id': transport_type_id, 'direction': direction},
-#                {'external_code': line_code, 'transport_type_id': transport_type_id, 'direction': direction})
-#            total_stops = line['totalStops']
-#            for stop in line['stops']:
-#                stop_code = stop['stopCode']
-#                order_number = stop['orderNumber']
-#                sql.getOrInsert('line_stops',
-#                {'external_id': stop_code, 'transport_line_id': transport_line_id, 'order_number': order_number},
-#                {'external_id': stop_code, 'transport_line_id': transport_line_id, 'order_number': order_number})
     return "Successfully inserted data into MySQL."
 
 @app.route('/get-line-mapping', methods=['GET'])
