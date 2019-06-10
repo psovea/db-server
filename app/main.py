@@ -41,6 +41,7 @@ def make_transport_line_stop(transport_line_id, stop_id, order):
 
 @app.route('/insert-metrics', methods=['POST'])
 def insert_metrics():
+    """Insert transport metrics into the Prometheus DB."""
     data = request.get_json()
     print("Got data: " + str(data))
     for data_point in data:
@@ -55,6 +56,7 @@ def insert_metrics():
 
 @app.route('/insert-static-stops', methods=['POST'])
 def insert_static_stops():
+    """Instert all stops into the MySQL DB."""
     sql = MysqlConnector()
     data = request.get_json()
 
@@ -86,6 +88,7 @@ def insert_static_stops():
 
 @app.route('/insert-static', methods=['POST'])
 def insert_static():
+    """Insert all lines and corresponding data into the MySQL DB."""
     sql = MysqlConnector()
     data = request.get_json()
 
@@ -130,3 +133,33 @@ def get_line_mapping():
     sql = MysqlConnector()
     dicts = {a:b for a,b in sql.getLineToTypeMapping()}
     return json.dumps(dicts)
+
+@app.route('/get-stops', methods=['GET'])
+def get_stops():
+    stop_code = request.args.get("stop_code", default="%", type=int)
+    lat = request.args.get("lat", default="%", type=str).split(",")
+    lon = request.args.get("lon", default="%", type=str).split(",")
+    name = request.args.get("name", default="%", type=str).split(",")
+    town = request.args.get("town", default="%", type=str).split(",")
+    area_code = request.args.get("area_code", default="%", type=str).split(",")
+    wheelchair_accs = request.args.get("wheelchair", default="%", type=bool)
+    visual_accs = request.args.get("visual", default="%", type=bool)
+
+    sql = MysqlConnector()
+
+    search_values = {
+            "stop_code": stop_code,
+            "lat": lat,
+            "lon": lon,
+            "name": name,
+            "town": town,
+            "area_code": area_code,
+            "accessibility_wheelchair": wheelchair_accs,
+            "accessibility_visual": visual_accs
+    }
+
+    print(search_values)
+
+    return json.dumps([make_stop(*stop[1:]) for stop in sql.selectOptions('stops', search_values)]), {'Content-Type': 'application/json'}
+
+
