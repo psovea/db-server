@@ -115,9 +115,12 @@ def insert_static():
                             {"internal_id": line_id})
                     order = stop["orderNumber"]
 
+                    transport_line_stop = make_transport_line_stop(
+                            transport_line_id,
+                            stop_id, order)
+
                     sql.getOrInsert("transport_lines_stops",
-                            make_transport_line_stop(transport_line_id,
-                                stop_id, order))
+                            transport_line_stop, transport_line_stop)
             except Exception as e:
                 print(e)
     return "Successfully inserted data into MySQL."
