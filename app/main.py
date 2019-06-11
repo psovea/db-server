@@ -8,9 +8,10 @@ app = Flask(__name__)
 
 server = PromInsertServer()
 
-def make_transport_line(operator_id, line_id, transport_type_id, line_obj):
+def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_obj):
     """Returns an object for a transport line to be placed in the db"""
     return {"operator_id": operator_id,
+            "direction_id": dir_id,
             "internal_id": line_id,
             "public_id": line_obj["lineNumberName"],
             "name": line_obj["lineName"],
@@ -72,16 +73,17 @@ def insert_static_stops():
         access_wc = 1 if stop["accessibility"]["wheelchair"] else 0
         access_vi = 1 if stop["accessibility"]["visual"] else 0
 
-        insertObj = make_stop(stop_id, lat, lon, name, town, area_code,
+        insert_obj = make_stop(stop_id, lat, lon, name, town, area_code,
                 access_wc, access_vi)
-
+        
+        print("insert_obj ", insert_obj)
         try:
-            sql.getOrInsert("stops", insertObj, insertObj)
+            sql.getOrInsert("stops", insert_obj, insert_obj)
         except Exception as e:
             print(e)
             print(stop)
 
-        return "Great success."
+    return "Great success."
 
 
 @app.route('/insert-static', methods=['POST'])
@@ -100,7 +102,9 @@ def insert_static():
             line_obj = data[operator][line_id]
             transport_type_id = sql.getId("transport_types",
                     {"name": line_obj["transportType"]})
-            transport_line_obj = make_transport_line(operator_id, line_id,
+            internal_id = line_obj["lineCode"]
+
+            transport_line_obj = make_transport_line(operator_id, line_id, internal_id,
                     transport_type_id, line_obj)
 
             try:
@@ -111,8 +115,10 @@ def insert_static():
                 for stop in line_obj["stops"]:
                     stop_id = sql.getId("stops",
                             {"stop_code": stop["stopCode"]})
+                    
+
                     transport_line_id = sql.getId("transport_lines",
-                            {"internal_id": line_id})
+                            {"direction_id": line_id, "operator_id": operator_id})
                     order = stop["orderNumber"]
 
                     transport_line_stop = make_transport_line_stop(
