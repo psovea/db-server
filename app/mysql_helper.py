@@ -1,6 +1,21 @@
 import mysql.connector
 from environs import Env
 
+def build_query(table, keys, search_values, inner_join=None):
+    keywords = " AND  ".join([
+        " OR ".join(["{} LIKE '{}'".format(key, val) for val in values])
+        for key, values in search_values.items()
+    ])
+
+    if inner_join:
+        join_table, (key1, key2) = next(iter(inner_join.items()))
+        for join_table, (key1, key2) in inner_join.items():
+            table = "({} INNER JOIN {} ON {} = {})".format(table, join_table, key1, key2)
+
+    print(search_values.keys())
+    query = "SELECT {} FROM {} WHERE {}".format(",".join(keys), table, keywords)
+    print(query)
+    return query
 
 class MysqlConnector:
     def __init__(self):
@@ -17,6 +32,20 @@ class MysqlConnector:
             self.cursor = self.connection.cursor()
         else:
             print("Can't connect to DB...")
+
+
+    def execQuery(self, query, only_one=False):
+        self.cursor.execute(query)
+
+        # Fetch and return only the first occurrence.
+        if only_one:
+            return self.cursor.fetchone()
+
+        # Fetch and return all occurrences.
+        res = self.cursor.fetchall()
+        print(res)
+        return res
+
 
     def getId(self, table, search_values):
         first_search_key, first_search_value = next(
@@ -54,15 +83,4 @@ class MysqlConnector:
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
-    def selectOptions(self, table, search_values):
-        keywords = " AND  ".join([
-            " OR ".join(["{} LIKE '{}'".format(key, val) for val in values])
-            for key, values in search_values.items()
-        ])
-        query = "SELECT * FROM stops WHERE {}".format(keywords)
-
-        print(query)
-        self.cursor.execute(query)
-        #print(self.cursor.fetchall())
-        return self.cursor.fetchall()
 
