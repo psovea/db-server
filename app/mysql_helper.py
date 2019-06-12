@@ -18,12 +18,11 @@ def build_query(table, keys, search_values, inner_join=None, order_by=None, spli
             table = "({} INNER JOIN {} ON {} = {})".format(
                 table, join_table, key1, key2)
 
-    # print(search_values.keys())
     query = "SELECT {} FROM {} WHERE {}".format(
         ",".join(keys), table, search_params)
 
     if order_by:
-        query += "ORDER BY {}".format(order_by)
+        query += "ORDER BY {}".format(",".join(order_by))
     print(query)
     return query
 
@@ -57,7 +56,6 @@ class MysqlConnector:
 
         # Fetch and return all occurrences.
         res = self.cursor.fetchall()
-        # print(res)
         return res
 
     def getId(self, table, search_values):
@@ -91,5 +89,3 @@ class MysqlConnector:
         query = "SELECT transport_lines.public_id, transport_types.name FROM transport_lines LEFT JOIN transport_types ON transport_type_id = transport_types.id"
         self.cursor.execute(query)
         return self.cursor.fetchall()
-
-# SELECT `stops`.`stop_code`, `stops`.`name`, `transport_lines_stops`.`order_number` FROM (((`stops` INNER JOIN `transport_lines_stops` ON `stops`.`id`=`transport_lines_stops`.`stop_id`) INNER JOIN `transport_lines` ON `transport_lines`.`id` = `transport_lines_stops`.`transport_line_id`) INNER JOIN `operators` on `transport_lines`.`operator_id` = `operators`.`id`) WHERE `operators`.`name` LIKE 'GVB' AND `transport_lines`.`internal_id`LIKE '22' AND `transport_lines`.`direction` LIKE '1' ORDER BY `transport_lines_stops`.`order_number`

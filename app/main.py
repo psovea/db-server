@@ -22,24 +22,17 @@ def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_ob
             "total_stops": line_obj["totalStops"]}
 
 
-def get_transport_line(dir_name, pub_id, int_id, trans_type, name, op, dest, stops):
+def get_transport_line(direction, pub_id, int_id, trans_type, name, operator, dest, stops):
     """Returns an object for a transport line to send through the endpoint"""
     return {
-        "operator": op,
+        "operator": operator,
         "internal_id": int_id,
         "public_id": pub_id,
         "name": name,
         "destination_name": dest,
-        "direction_name": dir_name,
+        "direction": direction,
         "transport_type": trans_type,
         "total_stops": stops
-    }
-
-def make_line_info(stop_code, stop_name, order_number):
-    return {
-        "stop_code": stop_code,
-        "name": stop_name,
-        "order_number": order_number
     }
 
 
@@ -59,7 +52,7 @@ def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
 
 def get_stop(tup):
     """Returns a stop object to send through the endpoint"""
-    stop_id, lat, lon, name, town, area_code, access_wc, access_vi = tup
+    stop_id, lat, lon, name, town, area_code, access_wc, access_vi, district = tup
     return {
         "stop_code": stop_id,
         "lat": lat,
@@ -70,7 +63,8 @@ def get_stop(tup):
         "access": {
             "wheelchair": access_wc,
             "visual": access_vi
-        }
+        },
+        "district": district
     }
 
 
@@ -80,6 +74,17 @@ def make_transport_line_stop(transport_line_id, stop_id, order):
         "transport_line_id": transport_line_id,
         "stop_id": stop_id,
         "order_number": order
+    }
+
+
+def get_transport_line_stop(stop_code, stop_name, order_number, int_id, direction):
+    """Returns a transport line stop object to send through the endpoint"""
+    return {
+        "stop_code": stop_code,
+        "name": stop_name,
+        "order_number": order_number,
+        "internal_id": int_id,
+        "direction": direction
     }
 
 
@@ -204,8 +209,6 @@ def get_line_mapping():
 def get_stops():
     """Get stops from the MySQL DB."""
 
-    print(request.args)
-
     stop_code = request.args.get("stop_code", default="%", type=str).split(",")
     lat = request.args.get("lat", default="%", type=str).split(",")
     lon = request.args.get("lon", default="%", type=str).split(",")
@@ -215,21 +218,29 @@ def get_stops():
     area_code = request.args.get("area_code", default="%", type=str).split(",")
     wheelchair_accs = request.args.get("wheelchair", default="%", type=bool)
     visual_accs = request.args.get("visual", default="%", type=bool)
+    district = request.args.get("district", default="%", type=str).split(",")
 
     sql = MysqlConnector()
+
+    keys = ["stop_code", "lat", "lon", "stops.name", "town", "area_code", "accessibility_wheelchair", "accessibility_visual", "districts.name"]
 
     search_values = {
         "stop_code": stop_code,
         "lat": lat,
         "lon": lon,
-        "name": name,
+        "stops.name": name,
         "town": town,
         "area_code": area_code,
         "accessibility_wheelchair": wheelchair_accs,
-        "accessibility_visual": visual_accs
+        "accessibility_visual": visual_accs,
+        "districts.name": district
     }
 
-    query = build_query('stops', search_values.keys(), search_values)
+    join = {
+        "districts": ("districts.id", "stops.district_id")
+    }
+
+    query = build_query('stops', keys, search_values, join)
 
     return json.dumps([get_stop(stop) for stop in sql.execQuery(query)]), {'Content-Type': 'application/json'}
 
@@ -280,33 +291,45 @@ def get_line_info():
     """
     internal_ids = request.args.get(
         "internal_id", default="%", type=str).split(",")
-    operator = request.args.get("operator", default="%", type=str)
-
+    operator = request.args.get("operator", default="%", type=str).split(",")
+    direction = request.args.get("direction", default="%", type=str).split(",")
 
     sql = MysqlConnector()
     line_info_list = []
-    keys = ["stops.stop_code", "stops.name", "transport_lines_stops.order_number"]
+    keys = ["stops.stop_code", "stops.name",
+            "transport_lines_stops.order_number", "transport_lines.internal_id", "transport_lines.direction"]
 
-    for internal_id in internal_ids:
-        search_values = {
-            "transport_lines.internal_id": internal_id,
+    search_values = {
+            "transport_lines.internal_id": internal_ids,
             "operators.name": operator,
-            "transport_lines.direction": "1"
+            "transport_lines.direction": direction
         }
 
-        join = {
-            "transport_lines_stops": ("stops.id","transport_lines_stops.stop_id"),
-            "transport_lines":("transport_lines_stops.transport_line_id","transport_lines.id"),
-            "operators": ("transport_lines.operator_id","operators.id")
+    join = {
+            "transport_lines_stops": ("stops.id", "transport_lines_stops.stop_id"),
+            "transport_lines": ("transport_lines_stops.transport_line_id", "transport_lines.id"),
+            "operators": ("transport_lines.operator_id", "operators.id")
         }
 
-        query = build_query("stops", keys, search_values, join,"transport_lines_stops.order_number", split_search=False)
-        # res = zip(*sql.execQuery(query))
-        # print(stop_id)
-        line_info_list.append([make_line_info(stop_code, stop_name, order_number) for stop_code, stop_name, order_number in sql.execQuery(query)])
+    order = ["transport_lines.internal_id",
+             "transport_lines.direction",
+             "transport_lines_stops.order_number"]
 
-    # print(line_info_list)
-    return json.dumps(line_info_list), {"Content-Type": "application/json"}
+    query = build_query("stops", keys, search_values, join,
+                        order)
+    line_info = [get_transport_line_stop(*res)
+                           for res in sql.execQuery(query)]
+
+    prev_order_id = 0
+
+    for i, line_stop in enumerate(line_info):
+        if line_stop["order_number"] <= line_info[prev_order_id]["order_number"]:
+            line_info_list.append(line_info[prev_order_id:i])
+            prev_order_id = i
+
+    # The first list is empty, so we should omit that (hacky I know)
+    return json.dumps(line_info_list[1:]), {"Content-Type": "application/json"}
+
 
 
 @app.route('/get-districts', methods=['GET'])
