@@ -43,8 +43,12 @@ class MysqlConnector:
         else:
             print("Can't connect to DB...")
 
-    def execQuery(self, query, only_one=False):
+    def execQuery(self, query, only_one=False, no_result=False):
         self.cursor.execute(query)
+
+        if no_result:
+            self.connection.commit()
+            return
 
         # Fetch and return only the first occurrence.
         if only_one:
@@ -60,7 +64,6 @@ class MysqlConnector:
         for search_key, search_value in search_values.items():
             query += " AND {} = '{}'".format(search_key, search_value)
         query += " LIMIT 1"
-        print(query)
         self.cursor.execute(query)
         id = self.cursor.fetchone()
         if id:
@@ -83,6 +86,6 @@ class MysqlConnector:
         return self.insert(table, insert_values)
 
     def getLineToTypeMapping(self):
-        query = "SELECT transport_lines.external_code, transport_types.name FROM transport_lines LEFT JOIN transport_types ON transport_type_id = transport_types.id"
+        query = "SELECT transport_lines.public_id, transport_types.name FROM transport_lines LEFT JOIN transport_types ON transport_type_id = transport_types.id"
         self.cursor.execute(query)
         return self.cursor.fetchall()
