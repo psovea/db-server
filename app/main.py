@@ -23,7 +23,7 @@ def make_transport_line(operator_id, line_id, transport_type_id, line_obj):
     }
 
 
-def get_transport_line(dir_name, pub_id, int_id, trans_type, name, op, dest, stops):
+def get_transport_line(op, int_id, pub_id, name, dest, dir_name, trans_type, stops):
     """Returns an object for a transport line to send through the endpoint"""
     return {
         "operator": op,
@@ -31,7 +31,7 @@ def get_transport_line(dir_name, pub_id, int_id, trans_type, name, op, dest, sto
         "public_id": pub_id,
         "name": name,
         "destination_name": dest,
-        "direction_name": dir_name,
+        "direction": dir_name,
         "transport_type": trans_type,
         "total_stops": stops
     }
