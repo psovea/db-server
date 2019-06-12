@@ -43,7 +43,7 @@ GEOJSON_URL = "http://184.72.120.43:3000/districts"
 #     return [phi, lam]
 
 
-def bind_district():
+def bind_stops_to_districts():
     """
     Function which reads stop data and district coordinate data
     """
