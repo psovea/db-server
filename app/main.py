@@ -3,6 +3,7 @@ from flask import Flask, request, send_from_directory
 import json
 from insert_server import PromInsertServer
 from mysql_helper import MysqlConnector, build_query
+import bind_stop_code_to_district
 
 app = Flask(__name__)
 
@@ -182,13 +183,27 @@ def insert_static():
                 print(e)
     return "Successfully inserted data into MySQL."
 
+# Takes stop-code to district mappings from bind_stop_code_to_district.py
+# and inserts them into the database.
+@app.route('/match-districts-with-stops', methods=['GET'])
+def bind_stops_to_districts():
+    print("Finding all district mappings...")
+    sql = MysqlConnector()
+    bindings = bind_stop_code_to_district.get_stop_to_district_binds()
+    print("Starting inserting into database.")
+    for data in bindings:
+        district_id = sql.getOrInsert('districts', {'name': data['district']}, {'name': data['district']})
+        query = "UPDATE stops SET district_id = {} WHERE stop_code = '{}'".format(district_id, data['stop_code'])
+        sql.execQuery(query, no_result=True)
+        print("{} -> {}".format(data['stop_code'], data['district']))
+    print("Done!")
+    return "Done!"
 
 @app.route('/get-line-mapping', methods=['GET'])
 def get_line_mapping():
     sql = MysqlConnector()
     dicts = {a: b for a, b in sql.getLineToTypeMapping()}
     return json.dumps(dicts)
-
 
 @app.route('/get-stops', methods=['GET'])
 def get_stops():
