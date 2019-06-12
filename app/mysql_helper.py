@@ -18,7 +18,6 @@ def build_query(table, keys, search_values, inner_join=None, order_by=None, spli
             table = "({} INNER JOIN {} ON {} = {})".format(
                 table, join_table, key1, key2)
 
-    # print(search_values.keys())
     query = "SELECT {} FROM {} WHERE {}".format(
         ",".join(keys), table, search_params)
 
@@ -53,15 +52,11 @@ class MysqlConnector:
 
         # Fetch and return all occurrences.
         res = self.cursor.fetchall()
-        # print(res)
         return res
 
     def getId(self, table, search_values):
-        first_search_key, first_search_value = next(
-            iter(search_values.items()))
-        query = "SELECT id FROM {} WHERE {} = '{}'".format(
-            table, first_search_key, first_search_value)
-        del search_values[first_search_key]
+        first_search_key, first_search_value = next(iter(search_values.items()))
+        query = "SELECT id FROM {} WHERE {} = '{}'".format(table, first_search_key, first_search_value)
         for search_key, search_value in search_values.items():
             query += " AND {} = '{}'".format(search_key, search_value)
         query += " LIMIT 1"

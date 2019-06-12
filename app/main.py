@@ -8,19 +8,17 @@ app = Flask(__name__)
 
 server = PromInsertServer()
 
-
-def make_transport_line(operator_id, line_id, transport_type_id, line_obj):
+def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_obj):
     """Returns an object for a transport line to be placed in the db"""
-    return {
-        "operator_id": operator_id,
-        "internal_id": line_id,
-        "public_id": line_obj["lineNumberName"],
-        "name": line_obj["lineName"],
-        "destination_name": line_obj["destinationName"],
-        "direction": line_obj["direction"],
-        "transport_type_id": transport_type_id,
-        "total_stops": line_obj["totalStops"]
-    }
+    return {"operator_id": operator_id,
+            "direction_id": dir_id,
+            "internal_id": line_id,
+            "public_id": line_obj["lineNumberName"],
+            "name": line_obj["lineName"],
+            "destination_name": line_obj["destinationName"],
+            "direction": line_obj["direction"],
+            "transport_type_id": transport_type_id,
+            "total_stops": line_obj["totalStops"]}
 
 
 def get_transport_line(direction, pub_id, int_id, trans_type, name, operator, dest, stops):
@@ -51,8 +49,9 @@ def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
     }
 
 
-def get_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi, district):
+def get_stop(tup):
     """Returns a stop object to send through the endpoint"""
+    stop_id, lat, lon, name, town, area_code, access_wc, access_vi, district = tup
     return {
         "stop_code": stop_id,
         "lat": lat,
@@ -123,16 +122,18 @@ def insert_static_stops():
         access_wc = 1 if stop["accessibility"]["wheelchair"] else 0
         access_vi = 1 if stop["accessibility"]["visual"] else 0
 
-        insertObj = make_stop(stop_id, lat, lon, name, town, area_code,
-                              access_wc, access_vi)
+        insert_obj = make_stop(stop_id, lat, lon, name, town, area_code,
+                access_wc, access_vi)
+
+        print("insert_obj ", insert_obj)
 
         try:
-            sql.getOrInsert("stops", insertObj, insertObj)
+            sql.getOrInsert("stops", insert_obj, insert_obj)
         except Exception as e:
             print(e)
             print(stop)
 
-        return "Great success."
+    return "Great success."
 
 
 @app.route('/insert-static', methods=['POST'])
@@ -151,9 +152,11 @@ def insert_static():
         for line_id in data[operator].keys():
             line_obj = data[operator][line_id]
             transport_type_id = sql.getId("transport_types",
-                                          {"name": line_obj["transportType"]})
-            transport_line_obj = make_transport_line(operator_id, line_id,
-                                                     transport_type_id, line_obj)
+                    {"name": line_obj["transportType"]})
+            internal_id = line_obj["lineCode"]
+
+            transport_line_obj = make_transport_line(operator_id, line_id, internal_id,
+                    transport_type_id, line_obj)
 
             try:
                 sql.getOrInsert("transport_lines", transport_line_obj,
@@ -162,9 +165,11 @@ def insert_static():
                 # connect every stop with a line id
                 for stop in line_obj["stops"]:
                     stop_id = sql.getId("stops",
-                                        {"stop_code": stop["stopCode"]})
+                            {"stop_code": stop["stopCode"]})
+
+
                     transport_line_id = sql.getId("transport_lines",
-                                                  {"internal_id": line_id})
+                            {"direction_id": line_id, "operator_id": operator_id})
                     order = stop["orderNumber"]
 
                     transport_line_stop = make_transport_line_stop(
@@ -188,6 +193,7 @@ def get_line_mapping():
 @app.route('/get-stops', methods=['GET'])
 def get_stops():
     """Get stops from the MySQL DB."""
+
     stop_code = request.args.get("stop_code", default="%", type=str).split(",")
     lat = request.args.get("lat", default="%", type=str).split(",")
     lon = request.args.get("lon", default="%", type=str).split(",")
@@ -219,10 +225,9 @@ def get_stops():
         "districts": ("districts.id", "stops.district_id")
     }
 
-    print(search_values)
     query = build_query('stops', keys, search_values, join)
 
-    return json.dumps([get_stop(*stop) for stop in sql.execQuery(query)]), {'Content-Type': 'application/json'}
+    return json.dumps([get_stop(stop) for stop in sql.execQuery(query)]), {'Content-Type': 'application/json'}
 
 
 @app.route('/get-lines', methods=['GET'])
