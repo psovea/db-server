@@ -1,21 +1,32 @@
 import mysql.connector
 from environs import Env
 
-def build_query(table, keys, search_values, inner_join=None):
-    keywords = " AND  ".join([
-        " OR ".join(["{} LIKE '{}'".format(key, val) for val in values])
-        for key, values in search_values.items()
-    ])
+
+def build_query(table, keys, search_values, inner_join=None, order_by=None, split_search=True):
+    if split_search:
+        search_params = " AND  ".join([
+            " OR ".join(["{} LIKE '{}'".format(key, val) for val in values])
+            for key, values in search_values.items()
+        ])
+    else:
+        search_params = " AND ".join(["{} LIKE '{}'".format(
+            key, value) for key, value in search_values.items()])
 
     if inner_join:
         join_table, (key1, key2) = next(iter(inner_join.items()))
         for join_table, (key1, key2) in inner_join.items():
-            table = "({} INNER JOIN {} ON {} = {})".format(table, join_table, key1, key2)
+            table = "({} INNER JOIN {} ON {} = {})".format(
+                table, join_table, key1, key2)
 
-    print(search_values.keys())
-    query = "SELECT {} FROM {} WHERE {}".format(",".join(keys), table, keywords)
+    # print(search_values.keys())
+    query = "SELECT {} FROM {} WHERE {}".format(
+        ",".join(keys), table, search_params)
+
+    if order_by:
+        query += "ORDER BY {}".format(order_by)
     print(query)
     return query
+
 
 class MysqlConnector:
     def __init__(self):
@@ -33,7 +44,6 @@ class MysqlConnector:
         else:
             print("Can't connect to DB...")
 
-
     def execQuery(self, query, only_one=False):
         self.cursor.execute(query)
 
@@ -43,9 +53,8 @@ class MysqlConnector:
 
         # Fetch and return all occurrences.
         res = self.cursor.fetchall()
-        print(res)
+        # print(res)
         return res
-
 
     def getId(self, table, search_values):
         first_search_key, first_search_value = next(
@@ -83,4 +92,4 @@ class MysqlConnector:
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
-
+# SELECT `stops`.`stop_code`, `stops`.`name`, `transport_lines_stops`.`order_number` FROM (((`stops` INNER JOIN `transport_lines_stops` ON `stops`.`id`=`transport_lines_stops`.`stop_id`) INNER JOIN `transport_lines` ON `transport_lines`.`id` = `transport_lines_stops`.`transport_line_id`) INNER JOIN `operators` on `transport_lines`.`operator_id` = `operators`.`id`) WHERE `operators`.`name` LIKE 'GVB' AND `transport_lines`.`internal_id`LIKE '22' AND `transport_lines`.`direction` LIKE '1' ORDER BY `transport_lines_stops`.`order_number`

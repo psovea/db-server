@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 server = PromInsertServer()
 
+
 def make_transport_line(operator_id, line_id, transport_type_id, line_obj):
     """Returns an object for a transport line to be placed in the db"""
     return {
@@ -21,6 +22,7 @@ def make_transport_line(operator_id, line_id, transport_type_id, line_obj):
         "total_stops": line_obj["totalStops"]
     }
 
+
 def get_transport_line(dir_name, pub_id, int_id, trans_type, name, op, dest, stops):
     """Returns an object for a transport line to send through the endpoint"""
     return {
@@ -32,6 +34,13 @@ def get_transport_line(dir_name, pub_id, int_id, trans_type, name, op, dest, sto
         "direction_name": dir_name,
         "transport_type": trans_type,
         "total_stops": stops
+    }
+
+def make_line_info(stop_code, stop_name, order_number):
+    return {
+        "stop_code": stop_code,
+        "name": stop_name,
+        "order_number": order_number
     }
 
 
@@ -63,6 +72,7 @@ def get_stop(town, stop_id, lat, area_code, access_wc, lon, access_vi, name):
             "visual": access_vi
         }
     }
+
 
 def make_transport_line_stop(transport_line_id, stop_id, order):
     """Returns a transport line stop object to be placed in the database"""
@@ -109,7 +119,7 @@ def insert_static_stops():
         access_vi = 1 if stop["accessibility"]["visual"] else 0
 
         insertObj = make_stop(stop_id, lat, lon, name, town, area_code,
-                access_wc, access_vi)
+                              access_wc, access_vi)
 
         try:
             sql.getOrInsert("stops", insertObj, insertObj)
@@ -136,28 +146,28 @@ def insert_static():
         for line_id in data[operator].keys():
             line_obj = data[operator][line_id]
             transport_type_id = sql.getId("transport_types",
-                    {"name": line_obj["transportType"]})
+                                          {"name": line_obj["transportType"]})
             transport_line_obj = make_transport_line(operator_id, line_id,
-                    transport_type_id, line_obj)
+                                                     transport_type_id, line_obj)
 
             try:
                 sql.getOrInsert("transport_lines", transport_line_obj,
-                        transport_line_obj)
+                                transport_line_obj)
 
                 # connect every stop with a line id
                 for stop in line_obj["stops"]:
                     stop_id = sql.getId("stops",
-                            {"stop_code": stop["stopCode"]})
+                                        {"stop_code": stop["stopCode"]})
                     transport_line_id = sql.getId("transport_lines",
-                            {"internal_id": line_id})
+                                                  {"internal_id": line_id})
                     order = stop["orderNumber"]
 
                     transport_line_stop = make_transport_line_stop(
-                            transport_line_id,
-                            stop_id, order)
+                        transport_line_id,
+                        stop_id, order)
 
                     sql.getOrInsert("transport_lines_stops",
-                            transport_line_stop, transport_line_stop)
+                                    transport_line_stop, transport_line_stop)
             except Exception as e:
                 print(e)
     return "Successfully inserted data into MySQL."
@@ -166,7 +176,7 @@ def insert_static():
 @app.route('/get-line-mapping', methods=['GET'])
 def get_line_mapping():
     sql = MysqlConnector()
-    dicts = {a:b for a,b in sql.getLineToTypeMapping()}
+    dicts = {a: b for a, b in sql.getLineToTypeMapping()}
     return json.dumps(dicts)
 
 
@@ -176,7 +186,7 @@ def get_stops():
     stop_code = request.args.get("stop_code", default="%", type=str).split(",")
     lat = request.args.get("lat", default="%", type=str).split(",")
     lon = request.args.get("lon", default="%", type=str).split(",")
-    #TODO: handle stop names with spaces in them (aka almost all of them).
+    # TODO: handle stop names with spaces in them (aka almost all of them).
     name = request.args.get("name", default="%", type=str).split(",")
     town = request.args.get("town", default="%", type=str).split(",")
     area_code = request.args.get("area_code", default="%", type=str).split(",")
@@ -186,14 +196,14 @@ def get_stops():
     sql = MysqlConnector()
 
     search_values = {
-            "stop_code": stop_code,
-            "lat": lat,
-            "lon": lon,
-            "name": name,
-            "town": town,
-            "area_code": area_code,
-            "accessibility_wheelchair": wheelchair_accs,
-            "accessibility_visual": visual_accs
+        "stop_code": stop_code,
+        "lat": lat,
+        "lon": lon,
+        "name": name,
+        "town": town,
+        "area_code": area_code,
+        "accessibility_wheelchair": wheelchair_accs,
+        "accessibility_visual": visual_accs
     }
 
     print(search_values)
@@ -206,34 +216,38 @@ def get_stops():
 def get_lines():
     """Get lines from the MySQL DB."""
     operator = request.args.get("operator", default="%", type=str).split(",")
-    internal_id = request.args.get("internal_id", default="%", type=str).split(",")
+    internal_id = request.args.get(
+        "internal_id", default="%", type=str).split(",")
     public_id = request.args.get("public_id", default="%", type=str).split(",")
     # TODO: handle destination names with spaces.
     name = request.args.get("name", default="%", type=str).split(",")
-    destination_name = request.args.get("destination", default="%", type=str).split(",")
+    destination_name = request.args.get(
+        "destination", default="%", type=str).split(",")
     direction = request.args.get("direction", default="1", type=int)
-    transport_type = request.args.get("transport_type", default="%", type=str).split(",")
+    transport_type = request.args.get(
+        "transport_type", default="%", type=str).split(",")
     total_stops = request.args.get("total_stops", default="%", type=int)
 
     sql = MysqlConnector()
 
     search_values = {
-            "operators.name": operator,
-            "internal_id": internal_id,
-            "public_id": public_id,
-            "transport_lines.name": name,
-            "destination_name": destination_name,
-            "direction": direction,
-            "transport_types.name": transport_type,
-            "total_stops": total_stops
+        "operators.name": operator,
+        "internal_id": internal_id,
+        "public_id": public_id,
+        "transport_lines.name": name,
+        "destination_name": destination_name,
+        "direction": direction,
+        "transport_types.name": transport_type,
+        "total_stops": total_stops
     }
 
     join = {
-            "operators": ("transport_lines.operator_id", "operators.id"),
-            "transport_types": ("transport_lines.transport_type_id", "transport_types.id")
+        "operators": ("transport_lines.operator_id", "operators.id"),
+        "transport_types": ("transport_lines.transport_type_id", "transport_types.id")
     }
 
-    query = build_query("transport_lines", search_values.keys(), search_values, inner_join=join)
+    query = build_query("transport_lines", search_values.keys(),
+                        search_values, inner_join=join)
     return json.dumps([get_transport_line(*line) for line in sql.execQuery(query)]), {"Content-Type": "application/json"}
 
 
@@ -242,24 +256,35 @@ def get_line_info():
     """Get the information for one or more specific lines, like the route
        that line takes from the MySQL DB.
     """
-    internal_id = request.args.get("internal_id", default="%", type=str).split(",")
+    internal_ids = request.args.get(
+        "internal_id", default="%", type=str).split(",")
+    operator = request.args.get("operator", default="%", type=str)
+
 
     sql = MysqlConnector()
+    line_info_list = []
+    keys = ["stops.stop_code", "stops.name", "transport_lines_stops.order_number"]
 
-    line_id = sql.getId("transport_lines", {"internal_id": internal_id[0]})
-    stop_query = build_query("transport_lines_stops", ["id"], {"transport_line_id": [line_id]}) + "ORDER BY order_number"
-    stop_ids = list(sql.execQuery(stop_query))
+    for internal_id in internal_ids:
+        search_values = {
+            "transport_lines.internal_id": internal_id,
+            "operators.name": operator,
+            "transport_lines.direction": "1"
+        }
 
-    #TODO Error handling! Not every stop_id has a corresponding stop for some reason.
-    stops = [sql.execQuery(build_query("stops", ["stop_code"], {"id": [stop_id[0]]}))[0][0] for stop_id in stop_ids]
+        join = {
+            "transport_lines_stops": ("stops.id","transport_lines_stops.stop_id"),
+            "transport_lines":("transport_lines_stops.transport_line_id","transport_lines.id"),
+            "operators": ("transport_lines.operator_id","operators.id")
+        }
 
-    print(stops)
-    line = {
-        "line_id": line_id,
-        "stops": stops
-    }
+        query = build_query("stops", keys, search_values, join,"transport_lines_stops.order_number", split_search=False)
+        # res = zip(*sql.execQuery(query))
+        # print(stop_id)
+        line_info_list.append([make_line_info(stop_code, stop_name, order_number) for stop_code, stop_name, order_number in sql.execQuery(query)])
 
-    return json.dumps(line), {"Content-Type": "application/json"}
+    # print(line_info_list)
+    return json.dumps(line_info_list), {"Content-Type": "application/json"}
 
 
 @app.route('/get-districts', methods=['GET'])
