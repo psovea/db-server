@@ -57,11 +57,8 @@ class MysqlConnector:
         return res
 
     def getId(self, table, search_values):
-        first_search_key, first_search_value = next(
-            iter(search_values.items()))
-        query = "SELECT id FROM {} WHERE {} = '{}'".format(
-            table, first_search_key, first_search_value)
-        del search_values[first_search_key]
+        first_search_key, first_search_value = next(iter(search_values.items()))
+        query = "SELECT id FROM {} WHERE {} = '{}'".format(table, first_search_key, first_search_value)
         for search_key, search_value in search_values.items():
             query += " AND {} = '{}'".format(search_key, search_value)
         query += " LIMIT 1"
