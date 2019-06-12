@@ -21,17 +21,18 @@ def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_ob
             "total_stops": line_obj["totalStops"]}
 
 
-def get_transport_line(direction, pub_id, int_id, trans_type, name, operator, dest, stops):
+def get_transport_line(tup):
     """Returns an object for a transport line to send through the endpoint"""
+    direction, pub_id, int_id, trans_type, name, operator, dest, stops = tup
     return {
-        "operator": operator,
-        "internal_id": int_id,
-        "public_id": pub_id,
-        "name": name,
-        "destination_name": dest,
         "direction": direction,
+        "public_id": pub_id,
+        "internal_id": int_id,
         "transport_type": trans_type,
-        "total_stops": stops
+        "name": name,
+        "operator": operator,
+        "destination": dest,
+        "num_stops": stops
     }
 
 
@@ -76,8 +77,9 @@ def make_transport_line_stop(transport_line_id, stop_id, order):
     }
 
 
-def get_transport_line_stop(stop_code, stop_name, order_number, int_id, direction):
+def get_transport_line_stop(tup):
     """Returns a transport line stop object to send through the endpoint"""
+    stop_code, stop_name, order_number, int_id, direction = tup
     return {
         "stop_code": stop_code,
         "name": stop_name,
@@ -266,7 +268,7 @@ def get_lines():
 
     query = build_query("transport_lines", search_values.keys(),
                         search_values, inner_join=join)
-    return json.dumps([get_transport_line(*line) for line in sql.execQuery(query)]), {"Content-Type": "application/json"}
+    return json.dumps([get_transport_line(line) for line in sql.execQuery(query)]), {"Content-Type": "application/json"}
 
 
 @app.route('/get-line-info', methods=['GET'])
@@ -302,8 +304,8 @@ def get_line_info():
 
     query = build_query("stops", keys, search_values, join,
                         order)
-    line_info = [get_transport_line_stop(*res)
-                           for res in sql.execQuery(query)]
+    line_info = [get_transport_line_stop(line_stop)
+                           for line_stop in sql.execQuery(query)]
 
     prev_order_id = 0
 
