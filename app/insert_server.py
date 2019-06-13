@@ -1,4 +1,6 @@
 from prometheus_client import start_http_server, Metric, REGISTRY
+from kv6 import counters
+
 
 class PromInsertServer:
     def __init__(self, port=8000):
@@ -16,7 +18,7 @@ class PromInsertServer:
         # (scrape_interval is found in /etc/prometheus/prometheus.yml, when writing it is 5)
         self.scrape_amount = 60
         self.scrape_count = self.scrape_amount // 2
-        self.data = [[] for _ in range(60)]
+        self.data = [[] for _ in range(self.scrape_amount)]
         REGISTRY.register(self)
 
     def collect(self):
@@ -30,9 +32,14 @@ class PromInsertServer:
                 metric.add_sample(metric_name,
                                   value=float(value), labels=labels)
                 yield metric
-        print("scraped:", self.scrape_count)
         self.scrape_count = (self.scrape_count - 1) % self.scrape_amount
         self.data[self.scrape_count] = []
+
+        for labels, value in counters.items():
+            metric = Metric('location_punctuality', '', 'counter')
+            metric.add_sample('location_punctuality', value=float(
+                value), labels=dict(labels))
+            yield metric
 
     def insert_into_prom(self, metric, value, labels, info="", type_metric='gauge'):
         """metric_name is the name of actual metric, should be what the metric represents
