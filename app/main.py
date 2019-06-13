@@ -104,6 +104,12 @@ def insert_metrics():
             server.insert_into_prom(metric_name, value, meta)
     return "Successfully inserted metrics into PrometheusDB."
 
+@app.route('/get-heatmap-info', methods=['GET'])
+def get_heatmap_info():
+    import sys
+    sys.path.insert(0, '/home/ubuntu/analytics/app')
+    import get_graph
+    return get_graph.get_coor_weight_json()
 
 @app.route('/insert-static-stops', methods=['POST'])
 def insert_static_stops():
