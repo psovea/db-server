@@ -35,7 +35,7 @@ def get_line_info(line):
     URL = line_URL(line, OPERATOR)
     try:
         data = requests.get(url=URL).json()
-    except ConnectionRefusedError:
+    except requests.exceptions.RequestException:
         data = []
     return None if data == [] else data[0]
 
@@ -44,7 +44,7 @@ def get_stop_info(stop_code):
     URL = stop_URL("300" + stop_code)
     try:
         data = requests.get(url=URL).json()
-    except ConnectionRefusedError:
+    except requests.exceptions.RequestException:
         data = []
     return None if data == [] else data[0]
 
@@ -108,10 +108,7 @@ def parse_message(message):
             if not key in counters:
                 counters[key] = 0
             if increase > 0:
-                # try:
                 counters[key] += increase
-                # except KeyError:
-                #     counters[key] = 0
 
             punctualities[obj['vehiclenumber']]['punctuality'] = punc
             punctualities[obj['vehiclenumber']]['stop_code'] = stop
