@@ -1,0 +1,1483 @@
+ * Serving Flask app "app/main.py"
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+184.72.120.43 - - [11/Jun/2019 11:38:55] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:39:17] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:39:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:39:21] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:39:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:39:53] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:40:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:40:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:40:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:40:28] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:40:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:40:48] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:40:50] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:41:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:41:14] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:41:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:41:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:42:10] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:42:36] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:42:59] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:43:16] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:43:29] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:43:38] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:43:46] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:43:50] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:44:23] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:44:46] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:45:02] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:45:29] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:45:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:46:08] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:46:23] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:47:16] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:47:17] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:47:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:47:29] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:47:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:47:41] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:47:46] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:48:01] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:48:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:48:25] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:48:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:48:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:49:27] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:49:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:49:35] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:49:39] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:49:42] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:49:54] "POST /insert-metrics HTTP/1.1" 200 -
+scraped: 30
+scraped: 29
+scraped: 28
+Got data: [{'metrics': {'punctuality': '61'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 27
+scraped: 26
+scraped: 25
+scraped: 24
+Got data: [{'metrics': {'punctuality': '149'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 23
+Got data: [{'metrics': {'punctuality': '-72'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+Got data: [{'metrics': {'punctuality': '148'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+Got data: [{'metrics': {'punctuality': '-38'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 22
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+scraped: 17
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}, {'metrics': {'punctuality': '-75'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 16
+scraped: 15
+Got data: [{'metrics': {'punctuality': '-238'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 14
+scraped: 13
+Got data: [{'metrics': {'punctuality': '-35'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 12
+scraped: 11
+scraped: 10
+Got data: [{'metrics': {'punctuality': '85'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+Got data: [{'metrics': {'punctuality': '142'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 9
+Got data: [{'metrics': {'punctuality': '-91'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 8
+scraped: 7
+scraped: 6
+Got data: [{'metrics': {'punctuality': '171'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 5
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 4
+scraped: 3
+Got data: [{'metrics': {'punctuality': '-45'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 2
+scraped: 1
+Got data: [{'metrics': {'punctuality': '133'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 0
+scraped: 59
+scraped: 58
+Got data: [{'metrics': {'punctuality': '103'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+Got data: [{'metrics': {'punctuality': '32'}, 'meta': {'operator_name': 'GVB', 'line_number': '54', 'vehicle_number': '146'}}]
+scraped: 57
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+Got data: [{'metrics': {'punctuality': '-64'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 49
+scraped: 48
+scraped: 47
+scraped: 46
+scraped: 45
+scraped: 44
+Got data: [{'metrics': {'punctuality': '37'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 43
+scraped: 42
+scraped: 41
+scraped: 40
+Got data: [{'metrics': {'punctuality': '154'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 39
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '98'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 35
+scraped: 34
+Got data: [{'metrics': {'punctuality': '-96'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 33
+scraped: 32
+Got data: [{'metrics': {'punctuality': '-88'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 31
+scraped: 30
+Got data: [{'metrics': {'punctuality': '24'}, 'meta': {'operator_name': 'GVB', 'line_number': '53', 'vehicle_number': '100'}}]
+Got data: [{'metrics': {'punctuality': '-53'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 29
+scraped: 28
+scraped: 27
+scraped: 26
+scraped: 25
+scraped: 24
+scraped: 23
+Got data: [{'metrics': {'punctuality': '141'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 22
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+Got data: [{'metrics': {'punctuality': '108'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 17
+scraped: 16
+scraped: 15
+Got data: [{'metrics': {'punctuality': '39'}, 'meta': {'operator_name': 'GVB', 'line_number': '51', 'vehicle_number': '87'}}]
+scraped: 14
+scraped: 13
+scraped: 12
+scraped: 11
+scraped: 10
+Got data: [{'metrics': {'punctuality': '-91'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 9
+scraped: 8
+scraped: 7
+scraped: 6
+scraped: 5
+scraped: 4
+Got data: [{'metrics': {'punctuality': '-105'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 3
+scraped: 2
+Got data: [{'metrics': {'punctuality': '60'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 1
+scraped: 0
+scraped: 59
+Got data: [{'metrics': {'punctuality': '144'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 58
+scraped: 57
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+scraped: 49
+scraped: 48
+Got data: [{'metrics': {'punctuality': '-109'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+Got data: [{'metrics': {'punctuality': '113'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 47
+scraped: 46
+Got data: [{'metrics': {'punctuality': '-35'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+Got data: [{'metrics': {'punctuality': '29'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 45
+Got data: [{'metrics': {'punctuality': '-106'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 44
+scraped: 43
+Got data: [{'metrics': {'punctuality': '137'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 42
+Got data: [{'metrics': {'punctuality': '11'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 41
+scraped: 40
+scraped: 39
+Got data: [{'metrics': {'punctuality': '-120'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '25'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 35
+Got data: [{'metrics': {'punctuality': '116'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 34
+Got data: [{'metrics': {'punctuality': '-50'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 33
+scraped: 32
+scraped: 31
+scraped: 30
+scraped: 29
+scraped: 28
+Got data: [{'metrics': {'punctuality': '152'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 27
+scraped: 26
+scraped: 25
+scraped: 24
+scraped: 23
+scraped: 22
+Got data: [{'metrics': {'punctuality': '-66'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+Got data: [{'metrics': {'punctuality': '156'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 21
+Got data: [{'metrics': {'punctuality': '-57'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 20
+Got data: [{'metrics': {'punctuality': '37'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 19
+Got data: [{'metrics': {'punctuality': '-87'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 18
+scraped: 17
+Got data: [{'metrics': {'punctuality': '-7'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 16
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+Got data: [{'metrics': {'punctuality': '-104'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]184.72.120.43 - - [11/Jun/2019 11:50:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:50:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:50:23] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:50:52] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:51:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:51:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:51:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:51:46] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:52:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:52:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:52:21] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:53:06] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:53:43] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:53:55] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:53:59] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:54:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:54:37] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:55:24] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:55:50] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:55:51] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:56:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:56:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:56:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:56:35] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:56:56] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:57:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:57:41] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:57:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:58:02] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:58:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:58:06] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:58:11] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:58:39] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:58:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:59:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:59:13] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:59:14] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:59:28] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:59:38] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:59:56] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 11:59:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:00:39] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:01:05] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:01:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:01:23] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:01:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:01:35] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:01:55] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:01:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:02:08] "POST /insert-metrics HTTP/1.1" 200 -
+
+scraped: 11
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+Got data: [{'metrics': {'punctuality': '146'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 10
+scraped: 9
+scraped: 8
+scraped: 7
+scraped: 6
+scraped: 5
+Got data: [{'metrics': {'punctuality': '3'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 4
+scraped: 3
+scraped: 2
+scraped: 1
+Got data: [{'metrics': {'punctuality': '-62'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 0
+scraped: 59
+scraped: 58
+Got data: [{'metrics': {'punctuality': '-24'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 57
+Got data: [{'metrics': {'punctuality': '-13'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 56
+scraped: 55
+scraped: 54
+Got data: [{'metrics': {'punctuality': '123'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+scraped: 49
+Got data: [{'metrics': {'punctuality': '-62'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 48
+Got data: [{'metrics': {'punctuality': '154'}, 'meta': {'operator_name': 'GVB', 'line_number': '50', 'vehicle_number': '140'}}]
+scraped: 47
+Got data: [{'metrics': {'punctuality': '116'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 46
+scraped: 45
+scraped: 44
+scraped: 43
+scraped: 42
+scraped: 41
+scraped: 40
+scraped: 39
+scraped: 38
+Got data: [{'metrics': {'punctuality': '88'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 37
+scraped: 36
+scraped: 35
+scraped: 34
+scraped: 33
+scraped: 32
+scraped: 31
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 30
+scraped: 29
+Got data: [{'metrics': {'punctuality': '-9'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 28
+Got data: [{'metrics': {'punctuality': '-66'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 27
+scraped: 26
+scraped: 25
+Got data: [{'metrics': {'punctuality': '130'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 24
+scraped: 23
+scraped: 22
+scraped: 21
+scraped: 20
+Got data: [{'metrics': {'punctuality': '99'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 19
+scraped: 18
+scraped: 17
+scraped: 16
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+scraped: 11
+Got data: [{'metrics': {'punctuality': '84'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 10
+scraped: 9
+scraped: 8
+scraped: 7
+scraped: 6
+Got data: [{'metrics': {'punctuality': '42'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 5
+Got data: [{'metrics': {'punctuality': '25'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 4
+scraped: 3
+scraped: 2
+scraped: 1
+Got data: [{'metrics': {'punctuality': '-88'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 0
+Got data: [{'metrics': {'punctuality': '-40'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 59
+scraped: 58
+Got data: [{'metrics': {'punctuality': '66'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 57
+Got data: [{'metrics': {'punctuality': '71'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+scraped: 52
+Got data: [{'metrics': {'punctuality': '-58'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 51
+scraped: 50
+scraped: 49
+Got data: [{'metrics': {'punctuality': '-49'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 48
+scraped: 47
+scraped: 46
+scraped: 45
+scraped: 44
+scraped: 43
+Got data: [{'metrics': {'punctuality': '-97'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 42
+scraped: 41
+scraped: 40
+Got data: [{'metrics': {'punctuality': '89'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 39
+Got data: [{'metrics': {'punctuality': '-74'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}, {'metrics': {'punctuality': '-59'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+Got data: [{'metrics': {'punctuality': '22'}, 'meta': {'operator_name': 'GVB', 'line_number': '54', 'vehicle_number': '146'}}]
+scraped: 38
+Got data: [{'metrics': {'punctuality': '100'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 37
+Got data: [{'metrics': {'punctuality': '81'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 36
+scraped: 35
+scraped: 34
+scraped: 33
+scraped: 32
+Got data: [{'metrics': {'punctuality': '105'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 31
+scraped: 30
+scraped: 29
+scraped: 28
+Got data: [{'metrics': {'punctuality': '-95'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 27
+Got data: [{'metrics': {'punctuality': '-38'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 26
+scraped: 25
+Got data: [{'metrics': {'punctuality': '66'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+Got data: [{'metrics': {'punctuality': '-77'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 24
+scraped: 23
+scraped: 22
+Got data: [{'metrics': {'punctuality': '91'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 21
+scraped: 20
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 19
+scraped: 18
+scraped: 17
+scraped: 16
+Got data: [{'metrics': {'punctuality': '55'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+Got data: [{'metrics': {'punctuality': '-4'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+scraped: 11
+scraped: 10
+scraped: 9
+scraped: 8
+Got data: [{'metrics': {'punctuality': '-58'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 7
+scraped: 6
+scraped: 5
+scraped: 4
+scraped: 3
+Got data: [{'metrics': {'punctuality': '16'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 2
+scraped: 1
+scraped: 0
+Got data: [{'metrics': {'punctuality': '54'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 59
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '35', 'vehicle_number': '1414'}}]
+scraped: 58
+scraped: 57
+Got data: [{'metrics': {'punctuality': '-25'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+Got data: [{'metrics': {'punctuality': '-17'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+Got data: [{'metrics': {'punctuality': '4'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 52
+Got data: [{'metrics': {'punctuality': '-58'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 51
+scraped: 50
+Got data: [{'metrics': {'punctuality': '-6'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 49
+scraped: 48
+scraped: 47
+scraped: 46
+scraped: 45
+scraped: 44
+scraped: 43
+scraped: 42
+Got data: [{'metrics': {'punctuality': '47'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]184.72.120.43 - - [11/Jun/2019 12:02:49] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:03:00] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:03:11] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:03:25] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:04:17] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:04:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:04:35] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:04:48] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:04:50] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:05:00] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:05:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:05:28] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:05:47] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:06:13] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:06:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:06:23] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:06:39] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:06:46] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:07:05] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:07:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:07:24] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:07:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:07:34] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:08:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:08:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:08:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:08:48] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:08:49] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:09:01] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:09:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:09:41] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:09:43] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:09:49] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:09:51] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:10:48] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:10:55] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:11:25] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:11:34] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:12:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:12:29] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:13:14] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:13:23] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:13:39] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:14:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:14:50] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:14:52] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:15:02] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:15:42] "POST /insert-metrics HTTP/1.1" 200 -
+
+scraped: 41
+scraped: 40
+Got data: [{'metrics': {'punctuality': '-14'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 39
+scraped: 38
+scraped: 37
+Got data: [{'metrics': {'punctuality': '-91'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 36
+scraped: 35
+Got data: [{'metrics': {'punctuality': '-102'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 34
+scraped: 33
+scraped: 32
+scraped: 31
+scraped: 30
+scraped: 29
+scraped: 28
+scraped: 27
+scraped: 26
+scraped: 25
+scraped: 24
+Got data: [{'metrics': {'punctuality': '-49'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 23
+scraped: 22
+Got data: [{'metrics': {'punctuality': '31'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 21
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 20
+scraped: 19
+scraped: 18
+Got data: [{'metrics': {'punctuality': '-192'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+Got data: [{'metrics': {'punctuality': '-129'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 17
+scraped: 16
+Got data: [{'metrics': {'punctuality': '58'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+Got data: [{'metrics': {'punctuality': '-3'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 11
+scraped: 10
+Got data: [{'metrics': {'punctuality': '4'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 9
+scraped: 8
+scraped: 7
+scraped: 6
+Got data: [{'metrics': {'punctuality': '-209'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 5
+scraped: 4
+scraped: 3
+scraped: 2
+scraped: 1
+Got data: [{'metrics': {'punctuality': '-90'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 0
+scraped: 59
+Got data: [{'metrics': {'punctuality': '56'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+Got data: [{'metrics': {'punctuality': '-161'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 58
+scraped: 57
+scraped: 56
+Got data: [{'metrics': {'punctuality': '13'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 55
+scraped: 54
+Got data: [{'metrics': {'punctuality': '-226'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 53
+scraped: 52
+scraped: 51
+Got data: [{'metrics': {'punctuality': '35'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 50
+scraped: 49
+scraped: 48
+Got data: [{'metrics': {'punctuality': '26'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 47
+Got data: [{'metrics': {'punctuality': '24'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 46
+Got data: [{'metrics': {'punctuality': '-155'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 45
+Got data: [{'metrics': {'punctuality': '-104'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 44
+scraped: 43
+scraped: 42
+scraped: 41
+scraped: 40
+scraped: 39
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '-235'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 35
+Got data: [{'metrics': {'punctuality': '27'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 34
+scraped: 33
+Got data: [{'metrics': {'punctuality': '102'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 32
+scraped: 31
+scraped: 30
+Got data: [{'metrics': {'punctuality': '-141'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+Got data: [{'metrics': {'punctuality': '53'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 29
+scraped: 28
+scraped: 27
+Got data: [{'metrics': {'punctuality': '-91'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 26
+scraped: 25
+Got data: [{'metrics': {'punctuality': '-150'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 24
+scraped: 23
+scraped: 22
+scraped: 21
+scraped: 20
+scraped: 19
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+Got data: [{'metrics': {'punctuality': '-140'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 18
+Got data: [{'metrics': {'punctuality': '102'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 17
+Got data: [{'metrics': {'punctuality': '49'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 16
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+scraped: 11
+scraped: 10
+scraped: 9
+scraped: 8
+scraped: 7
+scraped: 6
+Got data: [{'metrics': {'punctuality': '106'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}, {'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 5
+Got data: [{'metrics': {'punctuality': '30'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 4
+scraped: 3
+scraped: 2
+scraped: 1
+scraped: 0
+scraped: 59
+Got data: [{'metrics': {'punctuality': '-158'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 58
+scraped: 57
+Got data: [{'metrics': {'punctuality': '111'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+scraped: 49
+Got data: [{'metrics': {'punctuality': '14'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 48
+scraped: 47
+scraped: 46
+Got data: [{'metrics': {'punctuality': '27'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 45
+scraped: 44
+scraped: 43
+scraped: 42
+scraped: 41
+scraped: 40
+scraped: 39
+scraped: 38
+scraped: 37
+Got data: [{'metrics': {'punctuality': '-109'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 36
+scraped: 35
+Got data: [{'metrics': {'punctuality': '105'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 34
+scraped: 33
+scraped: 32
+Got data: [{'metrics': {'punctuality': '-19'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}, {'metrics': {'punctuality': '-63'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 31
+scraped: 30
+scraped: 29
+scraped: 28
+scraped: 27
+scraped: 26
+scraped: 25
+scraped: 24
+Got data: [{'metrics': {'punctuality': '-63'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 23
+scraped: 22
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+Got data: [{'metrics': {'punctuality': '112'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 17
+Got data: [{'metrics': {'punctuality': '-96'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 16
+scraped: 15
+Got data: [{'metrics': {'punctuality': '-22'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 14
+scraped: 13
+scraped: 12
+scraped: 11
+scraped: 10
+scraped: 9
+scraped: 8
+scraped: 7
+Got data: [{'metrics': {'punctuality': '-78'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 6
+scraped: 5
+scraped: 4
+Got data: [{'metrics': {'punctuality': '52'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]184.72.120.43 - - [11/Jun/2019 12:16:00] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:16:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:16:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:17:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:17:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:17:21] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:17:36] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:17:40] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:17:41] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:17:59] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:18:16] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:18:33] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:18:36] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:19:00] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:19:10] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:19:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:19:45] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:19:47] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:19:51] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:19:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:20:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:20:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:20:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:20:27] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:20:36] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:20:52] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:21:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:21:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:22:07] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:22:17] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:22:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:22:29] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:23:16] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:23:28] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:23:36] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:24:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:24:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:24:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:24:42] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:24:59] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:25:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:25:47] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:25:50] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:26:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:26:21] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:26:36] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:26:38] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:26:40] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:27:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:27:46] "POST /insert-metrics HTTP/1.1" 200 -
+
+scraped: 3
+scraped: 2
+scraped: 1
+Got data: [{'metrics': {'punctuality': '51'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 0
+scraped: 59
+scraped: 58
+Got data: [{'metrics': {'punctuality': '-29'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 57
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+Got data: [{'metrics': {'punctuality': '38'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 50
+scraped: 49
+scraped: 48
+Got data: [{'metrics': {'punctuality': '-35'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 47
+Got data: [{'metrics': {'punctuality': '-264'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 46
+scraped: 45
+scraped: 44
+Got data: [{'metrics': {'punctuality': '-25'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}, {'metrics': {'punctuality': '-88'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+Got data: [{'metrics': {'punctuality': '23'}, 'meta': {'operator_name': 'GVB', 'line_number': '51', 'vehicle_number': '137'}}]
+scraped: 43
+Got data: [{'metrics': {'punctuality': '47'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 42
+scraped: 41
+scraped: 40
+Got data: [{'metrics': {'punctuality': '25'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 39
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '88'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 35
+scraped: 34
+scraped: 33
+Got data: [{'metrics': {'punctuality': '43'}, 'meta': {'operator_name': 'GVB', 'line_number': '54', 'vehicle_number': '84'}}]
+scraped: 32
+Got data: [{'metrics': {'punctuality': '39'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 31
+scraped: 30
+scraped: 29
+scraped: 28
+scraped: 27
+Got data: [{'metrics': {'punctuality': '-61'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 26
+scraped: 25
+Got data: [{'metrics': {'punctuality': '8'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 24
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '14', 'vehicle_number': '2038'}}]
+scraped: 23
+scraped: 22
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+Got data: [{'metrics': {'punctuality': '98'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+Got data: [{'metrics': {'punctuality': '30'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 17
+Got data: [{'metrics': {'punctuality': '-10'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 16
+Got data: [{'metrics': {'punctuality': '15'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+Got data: [{'metrics': {'punctuality': '-5'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 11
+Got data: [{'metrics': {'punctuality': '-49'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+Got data: [{'metrics': {'punctuality': '-224'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 10
+Got data: [{'metrics': {'punctuality': '-5'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 9
+scraped: 8
+Got data: [{'metrics': {'punctuality': '94'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 7
+scraped: 6
+scraped: 5
+Got data: [{'metrics': {'punctuality': '3'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 4
+scraped: 3
+scraped: 2
+scraped: 1
+scraped: 0
+Got data: [{'metrics': {'punctuality': '-31'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}, {'metrics': {'punctuality': '-44'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 59
+scraped: 58
+scraped: 57
+Got data: [{'metrics': {'punctuality': '-7'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+Got data: [{'metrics': {'punctuality': '5'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 49
+scraped: 48
+Got data: [{'metrics': {'punctuality': '-57'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 47
+Got data: [{'metrics': {'punctuality': '5'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 46
+Got data: [{'metrics': {'punctuality': '31'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 45
+scraped: 44
+scraped: 43
+scraped: 42
+scraped: 41
+scraped: 40
+scraped: 39
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '-42'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 35
+scraped: 34
+Got data: [{'metrics': {'punctuality': '30'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 33
+scraped: 32
+Got data: [{'metrics': {'punctuality': '-89'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 31
+scraped: 30
+scraped: 29
+scraped: 28
+scraped: 27
+scraped: 26
+scraped: 25
+scraped: 24
+Got data: [{'metrics': {'punctuality': '-68'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 23
+Got data: [{'metrics': {'punctuality': '-22'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 22
+scraped: 21
+Got data: [{'metrics': {'punctuality': '-33'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 20
+scraped: 19
+Got data: [{'metrics': {'punctuality': '-24'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 18
+scraped: 17
+scraped: 16
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+scraped: 11
+scraped: 10
+scraped: 9
+Got data: [{'metrics': {'punctuality': '5'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 8
+scraped: 7
+scraped: 6
+Got data: [{'metrics': {'punctuality': '-41'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 5
+Got data: [{'metrics': {'punctuality': '-113'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 4
+scraped: 3
+scraped: 2
+scraped: 1
+scraped: 0
+Got data: [{'metrics': {'punctuality': '-105'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 59
+Got data: [{'metrics': {'punctuality': '-38'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 58
+scraped: 57
+scraped: 56
+Got data: [{'metrics': {'punctuality': '115'}, 'meta': {'operator_name': 'GVB', 'line_number': '51', 'vehicle_number': '63'}}]
+Got data: [{'metrics': {'punctuality': '-20'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 55
+Got data: [{'metrics': {'punctuality': '-157'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+scraped: 49
+scraped: 48
+scraped: 47
+scraped: 46
+scraped: 45
+Got data: [{'metrics': {'punctuality': '-22'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 44
+scraped: 43
+scraped: 42
+Got data: [{'metrics': {'punctuality': '-77'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 41
+Got data: [{'metrics': {'punctuality': '84'}, 'meta': {'operator_name': 'GVB', 'line_number': '51', 'vehicle_number': '64'}}]184.72.120.43 - - [11/Jun/2019 12:27:52] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:27:56] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:27:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:28:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:28:44] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:28:54] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:29:06] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:29:28] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:30:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:30:10] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:30:16] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:30:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:30:28] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:30:43] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:30:53] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:31:06] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:31:13] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:31:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:31:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:32:35] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:33:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:33:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:33:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:33:48] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:34:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:34:21] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:34:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:35:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:35:21] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:35:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:35:57] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:36:04] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:36:18] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:36:30] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:36:43] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:37:09] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:37:24] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:37:31] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:37:42] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:38:01] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:38:19] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:38:23] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:38:39] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:38:41] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:38:52] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:38:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:39:01] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:39:11] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:39:47] "POST /insert-metrics HTTP/1.1" 200 -
+
+scraped: 40
+Got data: [{'metrics': {'punctuality': '-157'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+Got data: [{'metrics': {'punctuality': '-78'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 39
+scraped: 38
+scraped: 37
+scraped: 36
+scraped: 35
+scraped: 34
+scraped: 33
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}, {'metrics': {'punctuality': '-192'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 32
+scraped: 31
+Got data: [{'metrics': {'punctuality': '115'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 30
+scraped: 29
+Got data: [{'metrics': {'punctuality': '-97'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 28
+scraped: 27
+scraped: 26
+Got data: [{'metrics': {'punctuality': '4'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}, {'metrics': {'punctuality': '-54'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 25
+scraped: 24
+scraped: 23
+scraped: 22
+Got data: [{'metrics': {'punctuality': '59'}, 'meta': {'operator_name': 'GVB', 'line_number': '5', 'vehicle_number': '2201'}}]
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+scraped: 17
+scraped: 16
+scraped: 15
+Got data: [{'metrics': {'punctuality': '20'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 14
+scraped: 13
+Got data: [{'metrics': {'punctuality': '33'}, 'meta': {'operator_name': 'GVB', 'line_number': '51', 'vehicle_number': '85'}}]
+scraped: 12
+Got data: [{'metrics': {'punctuality': '41'}, 'meta': {'operator_name': 'GVB', 'line_number': '54', 'vehicle_number': '74'}}]
+scraped: 11
+scraped: 10
+Got data: [{'metrics': {'punctuality': '-59'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+Got data: [{'metrics': {'punctuality': '134'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 9
+scraped: 8
+scraped: 7
+Got data: [{'metrics': {'punctuality': '190'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 6
+scraped: 5
+Got data: [{'metrics': {'punctuality': '-80'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 4
+scraped: 3
+scraped: 2
+Got data: [{'metrics': {'punctuality': '-56'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 1
+Got data: [{'metrics': {'punctuality': '-169'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 0
+scraped: 59
+Got data: [{'metrics': {'punctuality': '-17'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+Got data: [{'metrics': {'punctuality': '140'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 58
+scraped: 57
+scraped: 56
+scraped: 55
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+scraped: 49
+scraped: 48
+scraped: 47
+scraped: 46
+scraped: 45
+scraped: 44
+Got data: [{'metrics': {'punctuality': '153'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 43
+scraped: 42
+scraped: 41
+scraped: 40
+scraped: 39
+Got data: [{'metrics': {'punctuality': '7'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 38
+scraped: 37
+scraped: 36
+scraped: 35
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+Got data: [{'metrics': {'punctuality': '153'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 34
+scraped: 33
+scraped: 32
+scraped: 31
+scraped: 30
+Got data: [{'metrics': {'punctuality': '111'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 29
+scraped: 28
+scraped: 27
+scraped: 26
+scraped: 25
+scraped: 24
+Got data: [{'metrics': {'punctuality': '-51'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 23
+Got data: [{'metrics': {'punctuality': '151'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 22
+Got data: [{'metrics': {'punctuality': '-41'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+scraped: 17
+scraped: 16
+scraped: 15
+scraped: 14
+scraped: 13
+Got data: [{'metrics': {'punctuality': '45'}, 'meta': {'operator_name': 'GVB', 'line_number': '50', 'vehicle_number': '109'}}]
+scraped: 12
+scraped: 11
+Got data: [{'metrics': {'punctuality': '126'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+Got data: [{'metrics': {'punctuality': '39'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 10
+scraped: 9
+scraped: 8
+scraped: 7
+scraped: 6
+scraped: 5
+scraped: 4
+Got data: [{'metrics': {'punctuality': '31'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 3
+Got data: [{'metrics': {'punctuality': '-117'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 2
+scraped: 1
+scraped: 0
+Got data: [{'metrics': {'punctuality': '-40'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 59
+scraped: 58
+scraped: 57
+Got data: [{'metrics': {'punctuality': '66'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 56
+scraped: 55
+Got data: [{'metrics': {'punctuality': '98'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+Got data: [{'metrics': {'punctuality': '-45'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 49
+scraped: 48
+scraped: 47
+Got data: [{'metrics': {'punctuality': '24'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 46
+scraped: 45
+Got data: [{'metrics': {'punctuality': '66'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 44
+scraped: 43
+Got data: [{'metrics': {'punctuality': '-94'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 42
+scraped: 41
+scraped: 40
+scraped: 39
+Got data: [{'metrics': {'punctuality': '68'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '-42'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 35
+Got data: [{'metrics': {'punctuality': '94'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 34
+scraped: 33
+scraped: 32
+Got data: [{'metrics': {'punctuality': '-113'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 31
+Got data: [{'metrics': {'punctuality': '57'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 30
+scraped: 29
+Got data: [{'metrics': {'punctuality': '80'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 28
+Got data: [{'metrics': {'punctuality': '-6'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 27
+Got data: [{'metrics': {'punctuality': '-40'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 26
+scraped: 25
+Got data: [{'metrics': {'punctuality': '75'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 24
+scraped: 23
+scraped: 22
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+Got data: [{'metrics': {'punctuality': '29'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 17
+Got data: [{'metrics': {'punctuality': '63'}, 'meta': {'operator_name': 'GVB', 'line_number': '53', 'vehicle_number': '83'}}]184.72.120.43 - - [11/Jun/2019 12:39:54] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:40:07] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:40:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:40:27] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:40:34] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:41:00] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:41:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:41:38] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:41:43] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:41:45] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:41:48] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:41:51] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:42:22] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:42:25] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:42:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:42:40] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:42:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:43:03] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:43:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:43:48] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:44:12] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:44:27] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:44:58] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:45:21] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:45:26] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:45:29] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:45:34] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:45:41] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:45:45] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:46:02] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:46:44] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:47:08] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:47:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:47:29] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:47:43] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:48:03] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:48:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:48:32] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:49:01] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:49:24] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:49:51] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:49:56] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:50:01] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:50:13] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:50:33] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:50:35] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:51:11] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:51:15] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:51:18] "POST /insert-metrics HTTP/1.1" 200 -
+
+scraped: 16
+scraped: 15
+scraped: 14
+Got data: [{'metrics': {'punctuality': '120'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 13
+scraped: 12
+scraped: 11
+Got data: [{'metrics': {'punctuality': '19'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 10
+Got data: [{'metrics': {'punctuality': '-69'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 9
+Got data: [{'metrics': {'punctuality': '-100'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 8
+scraped: 7
+scraped: 6
+scraped: 5
+scraped: 4
+scraped: 3
+Got data: [{'metrics': {'punctuality': '119'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 2
+scraped: 1
+scraped: 0
+Got data: [{'metrics': {'punctuality': '74'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 59
+scraped: 58
+scraped: 57
+scraped: 56
+Got data: [{'metrics': {'punctuality': '28'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 55
+Got data: [{'metrics': {'punctuality': '78'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 54
+Got data: [{'metrics': {'punctuality': '-71'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+Got data: [{'metrics': {'punctuality': '60'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 53
+Got data: [{'metrics': {'punctuality': '78'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 52
+scraped: 51
+scraped: 50
+scraped: 49
+scraped: 48
+scraped: 47
+Got data: [{'metrics': {'punctuality': '19'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 46
+Got data: [{'metrics': {'punctuality': '27'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 45
+scraped: 44
+scraped: 43
+Got data: [{'metrics': {'punctuality': '50'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 42
+scraped: 41
+scraped: 40
+Got data: [{'metrics': {'punctuality': '-128'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 39
+Got data: [{'metrics': {'punctuality': '0'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '308'}}]
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '74'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 35
+scraped: 34
+scraped: 33
+scraped: 32
+scraped: 31
+scraped: 30
+Got data: [{'metrics': {'punctuality': '33'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}, {'metrics': {'punctuality': '-55'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 29
+scraped: 28
+scraped: 27
+scraped: 26
+scraped: 25
+Got data: [{'metrics': {'punctuality': '29'}, 'meta': {'operator_name': 'GVB', 'line_number': '50', 'vehicle_number': '140'}}]
+scraped: 24
+scraped: 23
+scraped: 22
+Got data: [{'metrics': {'punctuality': '-213'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+scraped: 17
+scraped: 16
+Got data: [{'metrics': {'punctuality': '60'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 15
+scraped: 14
+scraped: 13
+scraped: 12
+scraped: 11
+Got data: [{'metrics': {'punctuality': '-2'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 10
+Got data: [{'metrics': {'punctuality': '25'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+Got data: [{'metrics': {'punctuality': '3'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 9
+Got data: [{'metrics': {'punctuality': '-85'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 8
+scraped: 7
+Got data: [{'metrics': {'punctuality': '36'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 6
+Got data: [{'metrics': {'punctuality': '-211'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 5
+scraped: 4
+scraped: 3
+Got data: [{'metrics': {'punctuality': '38'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 2
+scraped: 1
+scraped: 0
+scraped: 59
+scraped: 58
+scraped: 57
+scraped: 56
+scraped: 55
+Got data: [{'metrics': {'punctuality': '19'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 54
+scraped: 53
+scraped: 52
+scraped: 51
+scraped: 50
+Got data: [{'metrics': {'punctuality': '40'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 49
+scraped: 48
+Got data: [{'metrics': {'punctuality': '22'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 47
+scraped: 46
+Got data: [{'metrics': {'punctuality': '41'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 45
+scraped: 44
+scraped: 43
+Got data: [{'metrics': {'punctuality': '-80'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 42
+scraped: 41
+scraped: 40
+scraped: 39
+Got data: [{'metrics': {'punctuality': '33'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}, {'metrics': {'punctuality': '7'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 38
+scraped: 37
+scraped: 36
+Got data: [{'metrics': {'punctuality': '-136'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 35
+scraped: 34
+scraped: 33
+Got data: [{'metrics': {'punctuality': '49'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 32
+scraped: 31
+scraped: 30
+scraped: 29
+scraped: 28
+scraped: 27
+Got data: [{'metrics': {'punctuality': '54'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 26
+scraped: 25
+scraped: 24
+scraped: 23
+Got data: [{'metrics': {'punctuality': '-37'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}, {'metrics': {'punctuality': '-141'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '356'}}]
+scraped: 22
+scraped: 21
+scraped: 20
+scraped: 19
+scraped: 18
+scraped: 17
+Got data: [{'metrics': {'punctuality': '50'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+scraped: 16
+Got data: [{'metrics': {'punctuality': '-52'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 15
+Got data: [{'metrics': {'punctuality': '43'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '360'}}]
+scraped: 14
+scraped: 13
+Got data: [{'metrics': {'punctuality': '-10'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 12
+scraped: 11
+scraped: 10
+scraped: 9
+Got data: [{'metrics': {'punctuality': '-77'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1403'}}]
+scraped: 8
+Got data: [{'metrics': {'punctuality': '33'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1408'}}]
+scraped: 7
+scraped: 6
+scraped: 5
+scraped: 4
+scraped: 3
+scraped: 2
+scraped: 1
+Got data: [{'metrics': {'punctuality': '-62'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '309'}}]
+scraped: 0
+Got data: [{'metrics': {'punctuality': '-41'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1420'}}]
+Got data: [{'metrics': {'punctuality': '-42'}, 'meta': {'operator_name': 'GVB', 'line_number': '22', 'vehicle_number': '1422'}}]
+scraped: 59
+Got data: [{'metrics': {'punctuality': '50'}, 'meta': {'operator_name': 'GVB', 'line_number': '53', 'vehicle_number': '103'}}]184.72.120.43 - - [11/Jun/2019 12:51:24] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:51:46] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:51:53] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:52:13] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:52:20] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:52:47] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:52:54] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:52:57] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:53:03] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:53:24] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:53:41] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:54:40] "POST /insert-metrics HTTP/1.1" 200 -
+184.72.120.43 - - [11/Jun/2019 12:54:45] "POST /insert-metrics HTTP/1.1" 200 -
