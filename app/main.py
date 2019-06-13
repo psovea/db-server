@@ -4,7 +4,6 @@ import json
 from insert_server import PromInsertServer
 from mysql_helper import MysqlConnector, build_query
 import bind_stop_code_to_district
-from kv6 import parse_message
 
 import json
 import zmq
@@ -12,17 +11,6 @@ import xmltodict
 import gzip
 import requests
 
-CONTEXT = zmq.Context()
-SOCKET = CONTEXT.socket(zmq.SUB)
-
-url = 'tcp://pubsub.besteffort.ndovloket.nl:7658'
-
-SOCKET.connect(url)
-
-topicfilter = "/GVB/"
-SOCKET.setsockopt_string(zmq.SUBSCRIBE, topicfilter)
-
-app = Flask(__name__)
 
 app = Flask(__name__)
 
@@ -389,15 +377,4 @@ def get_delays():
     return_filters = data.getlist('return_filter[]')
     return jsonify(top_ten_bottlenecks(time_begin, time_end, valid_days, period, districts=districts,
                                        transport_types=transport_types, operators=operators, return_filters=return_filters))
-
-
-def ordered_dict_to_dict(od):
-    """ hacky way to create regular dict from ordered dict. """
-    return json.loads(json.dumps(od))
-
-
-while True:
-    message = SOCKET.recv_multipart()
-    xml = gzip.decompress(message[1]).decode("utf-8")
-    message = ordered_dict_to_dict(xmltodict.parse(xml))
-    parse_message(message)
+                                       

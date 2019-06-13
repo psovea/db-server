@@ -4,9 +4,20 @@ import xmltodict
 import gzip
 import requests
 
+from flask import Flask, request, send_from_directory, jsonify
+
 ARRIVAL = "ARRIVAL"
 OPERATOR = "GVB"
 
+CONTEXT = zmq.Context()
+SOCKET = CONTEXT.socket(zmq.SUB)
+
+url = 'tcp://pubsub.besteffort.ndovloket.nl:7658'
+
+SOCKET.connect(url)
+
+topicfilter = "/GVB/"
+SOCKET.setsockopt_string(zmq.SUBSCRIBE, topicfilter)
 
 punctualities = {}
 counters = {}
@@ -127,3 +138,16 @@ def parse_message(message):
                 'transport_type': line_info['transport_type'],
                 'operator': line_info['operator']
             }
+
+
+def ordered_dict_to_dict(od):
+    """ hacky way to create regular dict from ordered dict. """
+    return json.loads(json.dumps(od))
+
+
+if __name__ == '__main__':
+    while True:
+        message = SOCKET.recv_multipart()
+        xml = gzip.decompress(message[1]).decode("utf-8")
+        message = ordered_dict_to_dict(xmltodict.parse(xml))
+        parse_message(message)
