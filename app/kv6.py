@@ -3,8 +3,8 @@ import zmq
 import xmltodict
 import gzip
 import requests
+from insert_server import PromInsertServer
 
-from flask import Flask, request, send_from_directory, jsonify
 
 ARRIVAL = "ARRIVAL"
 OPERATOR = "GVB"
@@ -23,6 +23,8 @@ punctualities = {}
 counters = {}
 line_info = {}
 stop_info = {}
+
+server = PromInsertServer(8001)
 
 
 def line_URL(line, operator):
