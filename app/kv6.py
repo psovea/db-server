@@ -3,7 +3,6 @@ import zmq
 import xmltodict
 import gzip
 import requests
-from insert_server import PromInsertServer
 
 
 ARRIVAL = "ARRIVAL"
@@ -23,8 +22,6 @@ punctualities = {}
 counters = {}
 line_info = {}
 stop_info = {}
-
-server = PromInsertServer(8001)
 
 
 def line_URL(line, operator):
@@ -148,6 +145,8 @@ def ordered_dict_to_dict(od):
 
 
 if __name__ == '__main__':
+    from insert_server import PromInsertServer
+    server = PromInsertServer(8001, counters)
     while True:
         message = SOCKET.recv_multipart()
         xml = gzip.decompress(message[1]).decode("utf-8")

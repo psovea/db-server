@@ -1,9 +1,9 @@
 from prometheus_client import start_http_server, Metric, REGISTRY
-from kv6 import counters
+# from kv6 import counters
 
 
 class PromInsertServer:
-    def __init__(self, port=8000):
+    def __init__(self, port=8000, counters={}):
         """Start the http server for scraping
         The port where you open should be scraped by prometheus
         e.g port 8000 could have:
@@ -19,6 +19,7 @@ class PromInsertServer:
         self.scrape_amount = 60
         self.scrape_count = self.scrape_amount // 2
         self.data = [[] for _ in range(self.scrape_amount)]
+        self.counters = counters
         REGISTRY.register(self)
 
     def collect(self):
@@ -35,7 +36,8 @@ class PromInsertServer:
         self.scrape_count = (self.scrape_count - 1) % self.scrape_amount
         self.data[self.scrape_count] = []
 
-        for labels, value in counters.items():
+        for labels, value in self.counters.items():
+            print(labels, value)
             metric = Metric('location_punctuality', '', 'counter')
             metric.add_sample('location_punctuality', value=float(
                 value), labels=dict(labels))
