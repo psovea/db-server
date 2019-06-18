@@ -56,7 +56,7 @@ def get_line_info(line):
 
 
 def get_stop_info(stop_code):
-    URL = stop_URL("300" + stop_code)
+    URL = stop_URL(stop_code)
     try:
         data = requests.get(url=URL).json()
     except requests.exceptions.RequestException:
@@ -72,7 +72,6 @@ def location_punctuality_metric(begin, end, increase, vehicle_number, line_numbe
     try:
         district = stop_info[end]['district']
     except KeyError:
-        print("Getting stop info")
         stop = get_stop_info(end)
         if stop is not None:
             stop_info[end] = stop
@@ -80,19 +79,13 @@ def location_punctuality_metric(begin, end, increase, vehicle_number, line_numbe
         else:
             return {}
 
-    prefix = None
-    try:
-        prefix = prefix_dict[begin['operator']]
-    except KeyError:
-        prexix = ""
-
     return {
         'metrics': {
             'location_punctuality': increase
         },
         'meta': {
-            'stop_begin': prefix + begin['stop_code'],
-            'stop_end': prefix + end,
+            'stop_begin': begin['stop_code'],
+            'stop_end': end,
             'transport_type': begin['transport_type'],
             'district': district,
             'operator': begin['operator'],
@@ -108,7 +101,6 @@ def parse_message(message):
         data = message['VV_TM_PUSH']['KV6posinfo']
         pos_info = [data] if type(data) is dict else data
     except KeyError as e:
-        print("Message from openlocket is wrong")
         return []
 
     arrivals = [el for el in pos_info if filter_messages(ARRIVAL, el)]
@@ -116,19 +108,23 @@ def parse_message(message):
 
     for obj in arrivals:
         obj = obj[ARRIVAL]
-        stop = obj['userstopcode']
         punc = int(obj['punctuality'])
         line_num = obj['lineplanningnumber']
         vehicle_num = obj['vehiclenumber']
 
+        prefix = None
+        try:
+            prefix = prefix_dict[obj['dataownercode']]
+        except KeyError:
+            prefix = ""
+        stop = prefix + obj['userstopcode']
+
         try:
             if punctualities[obj['vehiclenumber']]['arrived']:
                 continue
-
             punctualities[obj['vehiclenumber']]['arrived'] = True
             prev = punctualities[obj['vehiclenumber']]
             increase = punc - prev['punctuality']
-
             met = location_punctuality_metric(
                 prev, stop, increase, vehicle_num, line_num)
             key = tuple(met['meta'].items())
@@ -136,37 +132,39 @@ def parse_message(message):
                 counters[key] = 0
             if increase > 0:
                 counters[key] += increase
-
-            # print("added to counters for: " + str(key) + " in arrival")
-            # print(punctualities[obj['vehiclenumber']])
-
         except KeyError:
             continue
 
     for obj in departures:
         obj = obj[DEPARTURE]
-        stop = obj['userstopcode']
         punc = int(obj['punctuality'])
         line_num = obj['lineplanningnumber']
         vehicle_num = obj['vehiclenumber']
 
-        line_info = get_line_info(line_num)
+        prefix = None
+        try:
+            prefix = prefix_dict[obj['dataownercode']]
+        except KeyError:
+            prefix = ""
+        stop = prefix + obj['userstopcode']
 
-        if line_info is None:
+        if line_num not in line_info:
+            line_info[line_num] = get_line_info(line_num)
+
+        if line_info[line_num] is None:
             continue
-
-        # print('added {} to punctualities in departure'.format(obj['vehiclenumber']))
 
         try:
             punctualities[obj['vehiclenumber']]['punctuality'] = punc
             punctualities[obj['vehiclenumber']]['stop_code'] = stop
             punctualities[obj['vehiclenumber']]['arrived'] = False
+
         except KeyError:
             punctualities[obj['vehiclenumber']] = {
                 'punctuality': int(punc),
                 'stop_code': stop,
-                'transport_type': line_info['transport_type'],
-                'operator': line_info['operator'],
+                'transport_type': line_info[line_num]['transport_type'],
+                'operator': line_info[line_num]['operator'],
                 'arrived': False
             }
 
