@@ -26,14 +26,14 @@ stop_info = {}
 
 def line_URL(line, operator):
     """ URL for retrieving information regarding a vehicle type from the database """
-    return "http://18.216.203.6:5000/get-lines?public_id={}&operator={}".format(
+    return "http://18.224.29.151:5000/get-lines?public_id={}&operator={}".format(
         line,
         operator)
 
 
 def stop_URL(stop_code):
     """ URL for retrieving information regarding a stop from the database """
-    return "http://18.216.203.6:5000/get-stops?stop_code={}".format(stop_code)
+    return "http://18.224.29.151:5000/get-stops?stop_code={}".format(stop_code)
 
 
 def filter_arrivals(tp, obj):
