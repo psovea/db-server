@@ -6,6 +6,8 @@ import requests
 
 
 ARRIVAL = "ARRIVAL"
+DEPARTURE = "DEPARTURE"
+
 OPERATOR = "GVB"
 
 CONTEXT = zmq.Context()
@@ -23,6 +25,8 @@ counters = {}
 line_info = {}
 stop_info = {}
 
+prefix_dict = {"GVB": "300"}
+
 
 def line_URL(line, operator):
     """ URL for retrieving information regarding a vehicle type from the database """
@@ -36,7 +40,7 @@ def stop_URL(stop_code):
     return "http://18.224.29.151:5000/get-stops?stop_code={}".format(stop_code)
 
 
-def filter_arrivals(tp, obj):
+def filter_messages(tp, obj):
     """ Filter arrivals on type and line number """
     return list(obj.keys())[0] == tp  # and obj[tp]['lineplanningnumber'] == line_num
 
@@ -76,13 +80,19 @@ def location_punctuality_metric(begin, end, increase, vehicle_number, line_numbe
         else:
             return {}
 
+    prefix = None
+    try:
+        prefix = prefix_dict[begin['operator']]
+    except KeyError:
+        prexix = ""
+
     return {
         'metrics': {
             'location_punctuality': increase
         },
         'meta': {
-            'stop_begin': '300' + begin['stop_code'],
-            'stop_end': '300' + end,
+            'stop_begin': prefix + begin['stop_code'],
+            'stop_end': prefix + end,
             'transport_type': begin['transport_type'],
             'district': district,
             'operator': begin['operator'],
@@ -101,9 +111,8 @@ def parse_message(message):
         print("Message from openlocket is wrong")
         return []
 
-    arrivals = [el for el in pos_info if filter_arrivals(ARRIVAL, el)]
-
-    # print(arrivals)
+    arrivals = [el for el in pos_info if filter_messages(ARRIVAL, el)]
+    departures = [el for el in pos_info if filter_messages(DEPARTURE, el)]
 
     for obj in arrivals:
         obj = obj[ARRIVAL]
@@ -113,6 +122,10 @@ def parse_message(message):
         vehicle_num = obj['vehiclenumber']
 
         try:
+            if punctualities[obj['vehiclenumber']]['arrived']:
+                continue
+
+            punctualities[obj['vehiclenumber']]['arrived'] = True
             prev = punctualities[obj['vehiclenumber']]
             increase = punc - prev['punctuality']
 
@@ -123,24 +136,38 @@ def parse_message(message):
                 counters[key] = 0
             if increase > 0:
                 counters[key] += increase
-            
-            print("added to counters for: " + str(key))
-            punctualities[obj['vehiclenumber']]['punctuality'] = punc
-            punctualities[obj['vehiclenumber']]['stop_code'] = stop
+
+            # print("added to counters for: " + str(key) + " in arrival")
+            # print(punctualities[obj['vehiclenumber']])
 
         except KeyError:
-            line_info = get_line_info(line_num)
+            continue
 
-            if line_info is None:
-                continue
+    for obj in departures:
+        obj = obj[DEPARTURE]
+        stop = obj['userstopcode']
+        punc = int(obj['punctuality'])
+        line_num = obj['lineplanningnumber']
+        vehicle_num = obj['vehiclenumber']
 
-            print('added {} to punctualities'.format(obj['vehiclenumber']))
+        line_info = get_line_info(line_num)
 
+        if line_info is None:
+            continue
+
+        # print('added {} to punctualities in departure'.format(obj['vehiclenumber']))
+
+        try:
+            punctualities[obj['vehiclenumber']]['punctuality'] = punc
+            punctualities[obj['vehiclenumber']]['stop_code'] = stop
+            punctualities[obj['vehiclenumber']]['arrived'] = False
+        except KeyError:
             punctualities[obj['vehiclenumber']] = {
                 'punctuality': int(punc),
                 'stop_code': stop,
                 'transport_type': line_info['transport_type'],
-                'operator': line_info['operator']
+                'operator': line_info['operator'],
+                'arrived': False
             }
 
 
