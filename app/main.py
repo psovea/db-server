@@ -1,7 +1,7 @@
 import time
 from flask import Flask, request, send_from_directory, jsonify
 import json
-from insert_server import PromInsertServer
+# from insert_server import PromInsertServer
 from mysql_helper import MysqlConnector, build_query
 import bind_stop_code_to_district
 
@@ -14,7 +14,7 @@ import requests
 
 app = Flask(__name__)
 
-server = PromInsertServer()
+# server = PromInsertServer()
 
 def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_obj):
     """Returns an object for a transport line to be placed in the db"""
@@ -100,19 +100,19 @@ def get_transport_line_stop(tup):
 def test():
     return 'success!'
 
-@app.route('/insert-metrics', methods=['POST'])
-def insert_metrics():
-    """Insert transport metrics into the Prometheus DB."""
-    data = request.get_json()
-    #print("Got data: " + str(data))
-    for data_point in data:
-        meta = data_point['meta']
-        metrics = data_point['metrics']
-        for metric_name, value in metrics.items():
-            # TODO: Let API send metric type (gauge? counter?) and process
-            # the metric type in this function.
-            server.insert_into_prom(metric_name, value, meta)
-    return "Successfully inserted metrics into PrometheusDB."
+# @app.route('/insert-metrics', methods=['POST'])
+# def insert_metrics():
+#     """Insert transport metrics into the Prometheus DB."""
+#     data = request.get_json()
+#     print("Got data: " + str(data))
+#     for data_point in data:
+#         meta = data_point['meta']
+#         metrics = data_point['metrics']
+#         for metric_name, value in metrics.items():
+#             # TODO: Let API send metric type (gauge? counter?) and process
+#             # the metric type in this function.
+#             server.insert_into_prom(metric_name, value, meta)
+#     return "Successfully inserted metrics into PrometheusDB."
 
 @app.route('/get-heatmap-info', methods=['GET'])
 def get_heatmap_info():
@@ -382,6 +382,6 @@ def get_delays():
     return_filters = data.getlist('return_filter[]')
     return jsonify(top_ten_bottlenecks(time_begin, time_end, valid_days, period, districts=districts,
                                        transport_types=transport_types, operators=operators, return_filters=return_filters))
-                                      
+
 if __name__ == '__main__':
       app.run(host='0.0.0.0', port=5000)
