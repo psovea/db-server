@@ -119,7 +119,8 @@ def parse_message(message):
                 counters[key] = 0
             if increase > 0:
                 counters[key] += increase
-
+            
+            print("added to counters for: " + str(key))
             punctualities[obj['vehiclenumber']]['punctuality'] = punc
             punctualities[obj['vehiclenumber']]['stop_code'] = stop
 
