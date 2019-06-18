@@ -26,14 +26,14 @@ stop_info = {}
 
 def line_URL(line, operator):
     """ URL for retrieving information regarding a vehicle type from the database """
-    return "http://18.216.203.6:5000/get-lines?public_id={}&operator={}".format(
+    return "http://18.224.29.151:5000/get-lines?public_id={}&operator={}".format(
         line,
         operator)
 
 
 def stop_URL(stop_code):
     """ URL for retrieving information regarding a stop from the database """
-    return "http://18.216.203.6:5000/get-stops?stop_code={}".format(stop_code)
+    return "http://18.224.29.151:5000/get-stops?stop_code={}".format(stop_code)
 
 
 def filter_arrivals(tp, obj):
@@ -46,6 +46,7 @@ def get_line_info(line):
     try:
         data = requests.get(url=URL).json()
     except requests.exceptions.RequestException:
+        print("Cannot get line info from db")
         data = []
     return None if data == [] else data[0]
 
@@ -55,16 +56,19 @@ def get_stop_info(stop_code):
     try:
         data = requests.get(url=URL).json()
     except requests.exceptions.RequestException:
+        print("Cannot get stop info from db")
         data = []
     return None if data == [] else data[0]
 
 
 def location_punctuality_metric(begin, end, increase, vehicle_number, line_number):
+    """Create a location punctuality metric from the given variables"""
     district = None
 
     try:
         district = stop_info[end]['district']
     except KeyError:
+        print("Getting stop info")
         stop = get_stop_info(end)
         if stop is not None:
             stop_info[end] = stop
@@ -94,7 +98,7 @@ def parse_message(message):
         data = message['VV_TM_PUSH']['KV6posinfo']
         pos_info = [data] if type(data) is dict else data
     except KeyError as e:
-        print(e)
+        print("Message from openlocket is wrong")
         return []
 
     arrivals = [el for el in pos_info if filter_arrivals(ARRIVAL, el)]
@@ -124,12 +128,12 @@ def parse_message(message):
             punctualities[obj['vehiclenumber']]['stop_code'] = stop
 
         except KeyError:
-            print('added {} to punctualities'.format(obj['vehiclenumber']))
-
             line_info = get_line_info(line_num)
 
             if line_info is None:
                 continue
+
+            print('added {} to punctualities'.format(obj['vehiclenumber']))
 
             punctualities[obj['vehiclenumber']] = {
                 'punctuality': int(punc),
