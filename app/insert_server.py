@@ -37,7 +37,6 @@ class PromInsertServer:
         self.data[self.scrape_count] = []
 
         for labels, value in self.counters.items():
-            print(labels, value)
             metric = Metric('location_punctuality', '', 'counter')
             metric.add_sample('location_punctuality', value=float(
                 value), labels=dict(labels))
