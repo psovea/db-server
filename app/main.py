@@ -119,7 +119,12 @@ def get_heatmap_info():
     import sys
     sys.path.insert(0, '/home/ubuntu/analytics/app')
     import get_graph
-    return get_graph.get_coor_weight_json()
+    data = request.args
+    transport_type = data.get("transport_type", default=None)
+    operator = data.get("operator", default=None)
+    district = data.get("district", default=None)
+    period = data.get("period", default="d")
+    return get_graph.get_coor_weight_json(period, transport_type, operator, district)
 
 @app.route('/insert-static-stops', methods=['POST'])
 def insert_static_stops():
