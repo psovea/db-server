@@ -31,7 +31,7 @@ def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_ob
 
 def get_transport_line(tup):
     """Returns an object for a transport line to send through the endpoint"""
-    direction, pub_id, int_id, trans_type, name, operator, dest, stops = tup
+    operator, int_id, pub_id, name, dest, direction, trans_type, stops = tup
     return {
         "direction": direction,
         "public_id": pub_id,
@@ -96,6 +96,9 @@ def get_transport_line_stop(tup):
         "direction": direction
     }
 
+@app.route('/', methods=['GET'])
+def test():
+    return 'success!'
 
 # @app.route('/insert-metrics', methods=['POST'])
 # def insert_metrics():
@@ -257,6 +260,8 @@ def get_stops():
 
     query = build_query('stops', keys, search_values, join)
 
+    print("got request")
+
     return json.dumps([get_stop(stop) for stop in sql.execQuery(query)]), {'Content-Type': 'application/json'}
 
 
@@ -377,4 +382,6 @@ def get_delays():
     return_filters = data.getlist('return_filter[]')
     return jsonify(top_ten_bottlenecks(time_begin, time_end, valid_days, period, districts=districts,
                                        transport_types=transport_types, operators=operators, return_filters=return_filters))
-                                       
+
+if __name__ == '__main__':
+      app.run(host='0.0.0.0', port=5000)
