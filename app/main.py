@@ -37,7 +37,7 @@ def get_transport_line(tup):
         "public_id": pub_id,
         "internal_id": int_id,
         "transport_type": trans_type,
-        "name": name,
+        "line_name": name,
         "operator": operator,
         "destination": dest,
         "num_stops": stops
@@ -50,7 +50,7 @@ def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
         "stop_code": stop_id,
         "lat": lat,
         "lon": lon,
-        "name": name,
+        "stop_name": name,
         "town": town,
         "area_code": area_code,
         "accessibility_wheelchair": access_wc,
@@ -90,7 +90,7 @@ def get_transport_line_stop(tup):
     stop_code, stop_name, order_number, int_id, direction = tup
     return {
         "stop_code": stop_code,
-        "name": stop_name,
+        "stop_name": stop_name,
         "order_number": order_number,
         "internal_id": int_id,
         "direction": direction
