@@ -43,7 +43,7 @@ def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
         "stop_code": stop_id,
         "lat": lat,
         "lon": lon,
-        "stop_name": name,
+        "name": name,
         "town": town,
         "area_code": area_code,
         "accessibility_wheelchair": access_wc,
@@ -58,7 +58,7 @@ def get_stop(tup):
         "stop_code": stop_id,
         "lat": lat,
         "lon": lon,
-        "name": name,
+        "stop_name": name,
         "town": town,
         "area_code": area_code,
         "access": {
@@ -89,6 +89,10 @@ def get_transport_line_stop(tup):
         "direction": direction
     }
 
+@app.after_request
+def apply_cors(resp):
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 @app.route('/insert-metrics', methods=['POST'])
 def insert_metrics():
