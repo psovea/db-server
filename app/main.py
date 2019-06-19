@@ -159,8 +159,6 @@ def insert_static_stops():
         insert_obj = make_stop(stop_id, lat, lon, name, town, area_code,
                 access_wc, access_vi)
 
-        print("insert_obj ", insert_obj)
-
         try:
             sql.getOrInsert("stops", insert_obj, insert_obj)
         except Exception as e:
@@ -220,16 +218,13 @@ def insert_static():
 # and inserts them into the database.
 @app.route('/match-districts-with-stops', methods=['GET'])
 def bind_stops_to_districts():
-    print("Finding all district mappings...")
     sql = MysqlConnector()
     bindings = bind_stop_code_to_district.get_stop_to_district_binds()
-    print("Starting inserting into database.")
     for data in bindings:
         district_id = sql.getOrInsert('districts', {'name': data['district']}, {'name': data['district']})
         query = "UPDATE stops SET district_id = {} WHERE stop_code = '{}'".format(district_id, data['stop_code'])
         sql.execQuery(query, no_result=True)
         print("{} -> {}".format(data['stop_code'], data['district']))
-    print("Done!")
     return "Done!"
 
 @app.route('/get-line-mapping', methods=['GET'])
@@ -274,8 +269,6 @@ def get_stops():
     }
 
     query = build_query('stops', keys, search_values, join)
-
-    print("got request")
 
     return json.dumps([get_stop(stop) for stop in sql.execQuery(query)]), {'Content-Type': 'application/json'}
 

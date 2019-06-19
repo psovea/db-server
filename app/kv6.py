@@ -68,7 +68,6 @@ def location_punctuality_metric(begin, end, increase, vehicle_number, line_numbe
     try:
         district = stop_info[end]['district']
     except KeyError:
-        print("Getting stop info")
         stop = get_stop_info(end)
         if stop is not None:
             stop_info[end] = stop
@@ -98,12 +97,9 @@ def parse_message(message):
         data = message['VV_TM_PUSH']['KV6posinfo']
         pos_info = [data] if type(data) is dict else data
     except KeyError as e:
-        print("Message from openlocket is wrong")
         return []
 
     arrivals = [el for el in pos_info if filter_arrivals(ARRIVAL, el)]
-
-    # print(arrivals)
 
     for obj in arrivals:
         obj = obj[ARRIVAL]
@@ -123,8 +119,7 @@ def parse_message(message):
                 counters[key] = 0
             if increase > 0:
                 counters[key] += increase
-            
-            print("added to counters for: " + str(key))
+
             punctualities[obj['vehiclenumber']]['punctuality'] = punc
             punctualities[obj['vehiclenumber']]['stop_code'] = stop
 
@@ -133,8 +128,6 @@ def parse_message(message):
 
             if line_info is None:
                 continue
-
-            print('added {} to punctualities'.format(obj['vehiclenumber']))
 
             punctualities[obj['vehiclenumber']] = {
                 'punctuality': int(punc),
