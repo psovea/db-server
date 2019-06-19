@@ -132,7 +132,7 @@ def get_district_delays():
     sys.path.insert(0, '/home/ubuntu/analytics/app')
     import fetch_prometheus
     data = request.args
-    amount = data.get("amount", default=None)
+    amount = data.get("amount", default=1)
     unit = data.get("unit", default='d')
     return jsonify(fetch_prometheus.donut_districts(amount=amount, unit=unit))
 
