@@ -124,7 +124,17 @@ def get_heatmap_info():
     operator = data.get("operator", default=None)
     district = data.get("district", default=None)
     period = data.get("period", default="d")
-    return get_graph.get_coor_weight_json(period, transport_type, operator, district)
+    return jsonify(get_graph.get_coor_weight_json(period, transport_type, operator, district))
+
+@app.route('/get-district-delays', methods=['GET'])
+def get_district_delays():
+    import sys
+    sys.path.insert(0, '/home/ubuntu/analytics/app')
+    import fetch_prometheus
+    data = request.args
+    amount = data.get("amount", default=None)
+    unit = data.get("unit", default='d')
+    return jsonify(fetch_prometheus.donut_districts(amount=amount, unit=unit))
 
 @app.route('/insert-static-stops', methods=['POST'])
 def insert_static_stops():
