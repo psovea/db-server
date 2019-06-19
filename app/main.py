@@ -11,6 +11,7 @@ import xmltodict
 import gzip
 import requests
 
+analytics_app_location = '/home/ubuntu/analytics/app'
 
 app = Flask(__name__)
 
@@ -129,7 +130,7 @@ def get_heatmap_info():
 @app.route('/get-district-delays', methods=['GET'])
 def get_district_delays():
     import sys
-    sys.path.insert(0, '/home/ubuntu/analytics/app')
+    sys.path.insert(0, analytics_app_location)
     import fetch_prometheus
     data = request.args
     amount = data.get("amount", default=1, type=int)
@@ -321,7 +322,7 @@ def get_lines():
 
 @app.route('/get-line-info', methods=['GET'])
 def get_line_info():
-    """Get the information for one or more specific lines, like the route
+    """Get the information for one or more spetop_ten_bottleneckscific lines, like the route
        that line takes from the MySQL DB.
     """
     internal_ids = request.args.get(
@@ -375,8 +376,8 @@ def get_districts():
 @app.route('/get_delays', methods=['GET'])
 def get_delays():
     import sys
-    sys.path.insert(0, '/home/ubuntu/analytics/app')
-    import top_ten_bottlenecks
+    sys.path.insert(0, analytics_app_location)
+    import fetch_prometheus
     data = request.args
     time_begin = data.get('begin', default=0)
     time_end = data.get('end', default=86400)
@@ -395,7 +396,7 @@ def get_delays():
     if not operators:
         operators = ['GVB']
     return_filters = data.getlist('return_filter[]')
-    return jsonify(top_ten_bottlenecks(time_begin, time_end, valid_days, period, districts=districts,
+    return jsonify(fetch_prometheus.top_ten_bottlenecks(time_begin, time_end, valid_days, period, districts=districts,
                                        transport_types=transport_types, operators=operators, return_filters=return_filters))
 
 if __name__ == '__main__':
