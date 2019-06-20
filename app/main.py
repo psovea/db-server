@@ -67,7 +67,7 @@ def get_stop(tup):
         "stop_code": stop_id,
         "lat": lat,
         "lon": lon,
-        "name": name,
+        "stop_name": name,
         "town": town,
         "area_code": area_code,
         "access": {
@@ -97,6 +97,7 @@ def get_transport_line_stop(tup):
         "internal_id": int_id,
         "direction": direction
     }
+
 
 @app.route('/', methods=['GET'])
 def test():
