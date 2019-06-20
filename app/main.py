@@ -439,5 +439,16 @@ def get_delays():
             'k': data['top'],
             'subquery': sample
         }}
-    return jsonify(execute_json_prom_query(sample))
+
+    query_result = execute_json_prom_query(sample)
+    if 'format' in data:
+        if data['format'] == 'heatmap':
+            url = "http://18.224.29.151:5000/get-stops?town=amsterdam"
+            r = requests.get(url)
+            stops_json = r.json()
+            stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
+            query_result = [[*stops[point['metric']['stop_end']], float(point['value'][1])] for point in query_result]
+        if data['format'] == 'anders':
+            pass
+    return jsonify(query_result)
 
