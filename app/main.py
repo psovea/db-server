@@ -1,13 +1,22 @@
 import time
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify
 import json
-from insert_server import PromInsertServer
+# from insert_server import PromInsertServer
 from mysql_helper import MysqlConnector, build_query
 import bind_stop_code_to_district
+from datetime import datetime
+
+import json
+import zmq
+import xmltodict
+import gzip
+import requests
+
+analytics_app_location = '/home/ubuntu/analytics/app'
 
 app = Flask(__name__)
 
-server = PromInsertServer()
+# server = PromInsertServer()
 
 def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_obj):
     """Returns an object for a transport line to be placed in the db"""
@@ -24,7 +33,7 @@ def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_ob
 
 def get_transport_line(tup):
     """Returns an object for a transport line to send through the endpoint"""
-    direction, pub_id, int_id, trans_type, name, operator, dest, stops = tup
+    operator, int_id, pub_id, name, dest, direction, trans_type, stops = tup
     return {
         "direction": direction,
         "public_id": pub_id,
@@ -43,7 +52,7 @@ def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
         "stop_code": stop_id,
         "lat": lat,
         "lon": lon,
-        "name": name,
+        "stop_name": name,
         "town": town,
         "area_code": area_code,
         "accessibility_wheelchair": access_wc,
@@ -89,25 +98,46 @@ def get_transport_line_stop(tup):
         "direction": direction
     }
 
-@app.after_request
-def apply_cors(resp):
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    return resp
 
-@app.route('/insert-metrics', methods=['POST'])
-def insert_metrics():
-    """Insert transport metrics into the Prometheus DB."""
-    data = request.get_json()
-    print("Got data: " + str(data))
-    for data_point in data:
-        meta = data_point['meta']
-        metrics = data_point['metrics']
-        for metric_name, value in metrics.items():
-            # TODO: Let API send metric type (gauge? counter?) and process
-            # the metric type in this function.
-            server.insert_into_prom(metric_name, value, meta)
-    return "Successfully inserted metrics into PrometheusDB."
+@app.route('/', methods=['GET'])
+def test():
+    return 'success!'
 
+# @app.route('/insert-metrics', methods=['POST'])
+# def insert_metrics():
+#     """Insert transport metrics into the Prometheus DB."""
+#     data = request.get_json()
+#     print("Got data: " + str(data))
+#     for data_point in data:
+#         meta = data_point['meta']
+#         metrics = data_point['metrics']
+#         for metric_name, value in metrics.items():
+#             # TODO: Let API send metric type (gauge? counter?) and process
+#             # the metric type in this function.
+#             server.insert_into_prom(metric_name, value, meta)
+#     return "Successfully inserted metrics into PrometheusDB."
+
+@app.route('/get-heatmap-info', methods=['GET'])
+def get_heatmap_info():
+    import sys
+    sys.path.insert(0, '/home/ubuntu/analytics/app')
+    import get_graph
+    data = request.args
+    transport_type = data.get("transport_type", default=None)
+    operator = data.get("operator", default=None)
+    district = data.get("district", default=None)
+    period = data.get("period", default="d")
+    return jsonify(get_graph.get_coor_weight_json(period, transport_type, operator, district))
+
+@app.route('/get-district-delays', methods=['GET'])
+def get_district_delays():
+    import sys
+    sys.path.insert(0, analytics_app_location)
+    import fetch_prometheus
+    data = request.args
+    amount = data.get("amount", default=1, type=int)
+    unit = data.get("unit", default='d')
+    return jsonify(fetch_prometheus.donut_districts(amount=amount, unit=unit))
 
 @app.route('/insert-static-stops', methods=['POST'])
 def insert_static_stops():
@@ -131,8 +161,6 @@ def insert_static_stops():
 
         insert_obj = make_stop(stop_id, lat, lon, name, town, area_code,
                 access_wc, access_vi)
-
-        print("insert_obj ", insert_obj)
 
         try:
             sql.getOrInsert("stops", insert_obj, insert_obj)
@@ -193,16 +221,13 @@ def insert_static():
 # and inserts them into the database.
 @app.route('/match-districts-with-stops', methods=['GET'])
 def bind_stops_to_districts():
-    print("Finding all district mappings...")
     sql = MysqlConnector()
     bindings = bind_stop_code_to_district.get_stop_to_district_binds()
-    print("Starting inserting into database.")
     for data in bindings:
         district_id = sql.getOrInsert('districts', {'name': data['district']}, {'name': data['district']})
         query = "UPDATE stops SET district_id = {} WHERE stop_code = '{}'".format(district_id, data['stop_code'])
         sql.execQuery(query, no_result=True)
         print("{} -> {}".format(data['stop_code'], data['district']))
-    print("Done!")
     return "Done!"
 
 @app.route('/get-line-mapping', methods=['GET'])
@@ -292,7 +317,7 @@ def get_lines():
 
 @app.route('/get-line-info', methods=['GET'])
 def get_line_info():
-    """Get the information for one or more specific lines, like the route
+    """Get the information for one or more spetop_ten_bottleneckscific lines, like the route
        that line takes from the MySQL DB.
     """
     internal_ids = request.args.get(
@@ -341,3 +366,79 @@ def get_line_info():
 @app.route('/get-districts', methods=['GET'])
 def get_districts():
     return send_from_directory("../static", "districts.geojson"), {'Content-Type': 'application/json'}
+
+
+@app.route('/get_delays', methods=['GET'])
+def get_delays():
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
+    from analytics.app.fetch_prometheus import execute_json_prom_query
+
+    data = request.args
+    districts = data.getlist('district[]')
+    transport_types = data.getlist('transport_type[]')
+    operators = data.getlist('operator[]')
+    stop_begins = data.getlist('stop_begin[]')
+    stop_ends = data.getlist('stop_end[]')
+
+    labels = {
+        'district': districts,
+        'transport_type': transport_types,
+        'operator': operators,
+        'stop_begin': stop_begins,
+        'stop_end': stop_ends
+    }
+
+    labels = {key: '|'.join(value) for key, value in labels.items()}
+    return_filters = data.getlist('return_filter[]')
+    if 'period' in data:
+        time_range = data['period']
+        days_to_find = [{
+            "increase": {
+                "metric": "location_punctuality",
+                "labels": labels,
+                "period": str(time_range)
+            }
+        }]
+    else:
+        now = datetime.now()
+        seconds_since_midnight = (now - now.replace(hour=0, minute=0, second=0,
+                                                microsecond=0)).total_seconds()
+
+        start_day_time = data.get('start_time', 0, type=int)
+        end_day_time = data.get('end_time', 86400, type=int)
+        valid_days = data.getlist('valid_days')
+        past_days = data.get('past_days', 0, type=int)
+
+        offset = seconds_since_midnight - end_day_time
+        time_range = end_day_time - start_day_time
+        today = datetime.today().weekday()
+
+        inner_query = lambda off_time: {
+            "increase": {
+                "metric": "location_punctuality",
+                "labels": labels,
+                "period": str(time_range) + "s",
+                "offset": str(int(off_time)) + "s"
+            }
+        }
+
+        days_to_find = []
+        for day in range(past_days + 1):
+            if offset > 0 and (not valid_days or (today - day) % 7 in valid_days):
+                days_to_find.append(inner_query(offset))
+            offset += 86400
+    sample = {
+        "sum": {
+            "+": days_to_find
+        },
+        "by": return_filters
+    }
+    if 'top' in data:
+        sample = {'topk': {
+            'k': data['top'],
+            'subquery': sample
+        }}
+    return jsonify(execute_json_prom_query(sample))
+
