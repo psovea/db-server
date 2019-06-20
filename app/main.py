@@ -4,6 +4,7 @@ import json
 # from insert_server import PromInsertServer
 from mysql_helper import MysqlConnector, build_query
 import bind_stop_code_to_district
+from datetime import datetime
 
 import json
 import zmq
@@ -160,8 +161,6 @@ def insert_static_stops():
         insert_obj = make_stop(stop_id, lat, lon, name, town, area_code,
                 access_wc, access_vi)
 
-        print("insert_obj ", insert_obj)
-
         try:
             sql.getOrInsert("stops", insert_obj, insert_obj)
         except Exception as e:
@@ -221,16 +220,13 @@ def insert_static():
 # and inserts them into the database.
 @app.route('/match-districts-with-stops', methods=['GET'])
 def bind_stops_to_districts():
-    print("Finding all district mappings...")
     sql = MysqlConnector()
     bindings = bind_stop_code_to_district.get_stop_to_district_binds()
-    print("Starting inserting into database.")
     for data in bindings:
         district_id = sql.getOrInsert('districts', {'name': data['district']}, {'name': data['district']})
         query = "UPDATE stops SET district_id = {} WHERE stop_code = '{}'".format(district_id, data['stop_code'])
         sql.execQuery(query, no_result=True)
         print("{} -> {}".format(data['stop_code'], data['district']))
-    print("Done!")
     return "Done!"
 
 @app.route('/get-line-mapping', methods=['GET'])
@@ -275,8 +271,6 @@ def get_stops():
     }
 
     query = build_query('stops', keys, search_values, join)
-
-    print("got request")
 
     return json.dumps([get_stop(stop) for stop in sql.execQuery(query)]), {'Content-Type': 'application/json'}
 
@@ -376,28 +370,74 @@ def get_districts():
 @app.route('/get_delays', methods=['GET'])
 def get_delays():
     import sys
-    sys.path.insert(0, analytics_app_location)
-    import fetch_prometheus
-    data = request.args
-    time_begin = data.get('begin', default=0)
-    time_end = data.get('end', default=86400)
-    valid_days = data.getlist('day[]')
-    if not valid_days:
-        valid_days = [0, 1, 2, 3, 4, 5, 6]
-    period = data.get('period', default=14)
-    districts = data.getlist('district[]')
-    if not districts:
-        districts = ['Oost', 'Zuidoost', 'Noord', 'Westpoort',
-                     'West', 'Centrum', 'Nieuw-West', 'Zuid']
-    transport_types = data.getlist('transport_type[]')
-    if not transport_types:
-        transport_types = ['BUS']
-    operators = data.getlist('operator[]')
-    if not operators:
-        operators = ['GVB']
-    return_filters = data.getlist('return_filter[]')
-    return jsonify(fetch_prometheus.top_ten_bottlenecks(time_begin, time_end, valid_days, period, districts=districts,
-                                       transport_types=transport_types, operators=operators, return_filters=return_filters))
+    import os
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
+    from analytics.app.fetch_prometheus import execute_json_prom_query
 
-if __name__ == '__main__':
-      app.run(host='0.0.0.0', port=5000)
+    data = request.args
+    districts = data.getlist('district[]')
+    transport_types = data.getlist('transport_type[]')
+    operators = data.getlist('operator[]')
+    stop_begins = data.getlist('stop_begin[]')
+    stop_ends = data.getlist('stop_end[]')
+
+    labels = {
+        'district': districts,
+        'transport_type': transport_types,
+        'operator': operators,
+        'stop_begin': stop_begins,
+        'stop_end': stop_ends
+    }
+
+    labels = {key: '|'.join(value) for key, value in labels.items()}
+    return_filters = data.getlist('return_filter[]')
+    if 'period' in data:
+        time_range = data['period']
+        days_to_find = [{
+            "increase": {
+                "metric": "location_punctuality",
+                "labels": labels,
+                "period": str(time_range)
+            }
+        }]
+    else:
+        now = datetime.now()
+        seconds_since_midnight = (now - now.replace(hour=0, minute=0, second=0,
+                                                microsecond=0)).total_seconds()
+
+        start_day_time = data.get('start_time', 0, type=int)
+        end_day_time = data.get('end_time', 86400, type=int)
+        valid_days = data.getlist('valid_days')
+        past_days = data.get('past_days', 0, type=int)
+
+        offset = seconds_since_midnight - end_day_time
+        time_range = end_day_time - start_day_time
+        today = datetime.today().weekday()
+
+        inner_query = lambda off_time: {
+            "increase": {
+                "metric": "location_punctuality",
+                "labels": labels,
+                "period": str(time_range) + "s",
+                "offset": str(int(off_time)) + "s"
+            }
+        }
+
+        days_to_find = []
+        for day in range(past_days + 1):
+            if offset > 0 and (not valid_days or (today - day) % 7 in valid_days):
+                days_to_find.append(inner_query(offset))
+            offset += 86400
+    sample = {
+        "sum": {
+            "+": days_to_find
+        },
+        "by": return_filters
+    }
+    if 'top' in data:
+        sample = {'topk': {
+            'k': data['top'],
+            'subquery': sample
+        }}
+    return jsonify(execute_json_prom_query(sample))
+
