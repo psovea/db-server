@@ -12,6 +12,7 @@ import xmltodict
 import gzip
 import requests
 
+analytics_app_location = '/home/ubuntu/analytics/app'
 
 app = Flask(__name__)
 
@@ -130,10 +131,10 @@ def get_heatmap_info():
 @app.route('/get-district-delays', methods=['GET'])
 def get_district_delays():
     import sys
-    sys.path.insert(0, '/home/ubuntu/analytics/app')
+    sys.path.insert(0, analytics_app_location)
     import fetch_prometheus
     data = request.args
-    amount = data.get("amount", default=None)
+    amount = data.get("amount", default=1, type=int)
     unit = data.get("unit", default='d')
     return jsonify(fetch_prometheus.donut_districts(amount=amount, unit=unit))
 
@@ -315,7 +316,7 @@ def get_lines():
 
 @app.route('/get-line-info', methods=['GET'])
 def get_line_info():
-    """Get the information for one or more specific lines, like the route
+    """Get the information for one or more spetop_ten_bottleneckscific lines, like the route
        that line takes from the MySQL DB.
     """
     internal_ids = request.args.get(
