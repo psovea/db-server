@@ -6,8 +6,10 @@ from datetime import datetime
 
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
-import analytics.app as analytics
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
+# import analytics.app as analytics
+sys.path.insert(0, 'home/ubuntu/analytics/app')
+import fetch_prometheus as fp
 
 import json
 import requests
@@ -361,7 +363,7 @@ def delay_filters(data):
         'line_number': line_numbers
     }
 
-    labels = {key: '|'.join(value) for key, value in labels.items()}
+    return {key: '|'.join(value) for key, value in labels.items()}
 
 def recent_period_func(func, metric, labels, period):
     """Make a json query for prometheus which applies a func over a recent period,
@@ -379,7 +381,7 @@ def specific_period_func(func, metric, labels, data):
     e.g every tuesday from 4 to 7 PM or yesterday the whole day"""
     start_day_time = data.get('start_time', 0, type=int)
     end_day_time = data.get('end_time', 86400, type=int)
-    valid_days = data.getlist('valid_days')
+    valid_days = data.getlist('valid_days[]')
     past_days = data.get('past_days', 0, type=int)
 
     now = datetime.now()
@@ -444,7 +446,7 @@ def get_delays():
             }
         }
 
-    query_result = analytics.fetch_prometheus.execute_json_prom_query(sample)
+    query_result = fp.execute_json_prom_query(sample)
 
     if 'format' in data:
         if data['format'] == 'heatmap':
