@@ -12,6 +12,8 @@ class PromInsertServer:
             scrape_interval: 5s
             static_configs:
             - targets: ['localhost:8000']
+        The counters dict given with will be used to keep track of counters and
+        will be given to prometheus when scraped
         """
         start_http_server(port)
         # keep data for scrape_interval * scrape_amount
