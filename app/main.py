@@ -1,22 +1,20 @@
 import time
 from flask import Flask, request, send_from_directory, jsonify
-import json
-# from insert_server import PromInsertServer
 from mysql_helper import MysqlConnector, build_query
 import bind_stop_code_to_district
 from datetime import datetime
 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
+import analytics.app as analytics
+
 import json
-import zmq
-import xmltodict
-import gzip
 import requests
 
-analytics_app_location = '/home/ubuntu/analytics/app'
+REMOTEPROMINSERT = False
 
 app = Flask(__name__)
-
-# server = PromInsertServer()
 
 def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_obj):
     """Returns an object for a transport line to be placed in the db"""
@@ -98,46 +96,24 @@ def get_transport_line_stop(tup):
         "direction": direction
     }
 
+if REMOTEPROMINSERT:
+    from insert_server import PromInsertServer
+    server = PromInsertServer()
 
-@app.route('/', methods=['GET'])
-def test():
-    return 'success!'
+    @app.route('/insert-metrics', methods=['POST'])
+    def insert_metrics():
+        """Insert transport metrics into the Prometheus DB."""
+        data = request.get_json()
+        print("Got data: " + str(data))
+        for data_point in data:
+            meta = data_point['meta']
+            metrics = data_point['metrics']
+            for metric_name, value in metrics.items():
+                # TODO: Let API send metric type (gauge? counter?) and process
+                # the metric type in this function.
+                server.insert_into_prom(metric_name, value, meta)
+        return "Successfully inserted metrics into PrometheusDB."
 
-# @app.route('/insert-metrics', methods=['POST'])
-# def insert_metrics():
-#     """Insert transport metrics into the Prometheus DB."""
-#     data = request.get_json()
-#     print("Got data: " + str(data))
-#     for data_point in data:
-#         meta = data_point['meta']
-#         metrics = data_point['metrics']
-#         for metric_name, value in metrics.items():
-#             # TODO: Let API send metric type (gauge? counter?) and process
-#             # the metric type in this function.
-#             server.insert_into_prom(metric_name, value, meta)
-#     return "Successfully inserted metrics into PrometheusDB."
-
-@app.route('/get-heatmap-info', methods=['GET'])
-def get_heatmap_info():
-    import sys
-    sys.path.insert(0, '/home/ubuntu/analytics/app')
-    import get_graph
-    data = request.args
-    transport_type = data.get("transport_type", default=None)
-    operator = data.get("operator", default=None)
-    district = data.get("district", default=None)
-    period = data.get("period", default="d")
-    return jsonify(get_graph.get_coor_weight_json(period, transport_type, operator, district))
-
-@app.route('/get-district-delays', methods=['GET'])
-def get_district_delays():
-    import sys
-    sys.path.insert(0, analytics_app_location)
-    import fetch_prometheus
-    data = request.args
-    amount = data.get("amount", default=1, type=int)
-    unit = data.get("unit", default='d')
-    return jsonify(fetch_prometheus.donut_districts(amount=amount, unit=unit))
 
 @app.route('/insert-static-stops', methods=['POST'])
 def insert_static_stops():
@@ -217,10 +193,10 @@ def insert_static():
                 print(e)
     return "Successfully inserted data into MySQL."
 
-# Takes stop-code to district mappings from bind_stop_code_to_district.py
-# and inserts them into the database.
 @app.route('/match-districts-with-stops', methods=['GET'])
 def bind_stops_to_districts():
+    """Takes stop-code to district mappings from bind_stop_code_to_district.py
+    and inserts them into the database."""
     sql = MysqlConnector()
     bindings = bind_stop_code_to_district.get_stop_to_district_binds()
     for data in bindings:
@@ -362,94 +338,115 @@ def get_line_info():
     return json.dumps(line_info_list[1:]), {"Content-Type": "application/json"}
 
 
-
 @app.route('/get-districts', methods=['GET'])
 def get_districts():
     return send_from_directory("../static", "districts.geojson"), {'Content-Type': 'application/json'}
 
 
-@app.route('/get_delays', methods=['GET'])
-def get_delays():
-    import sys
-    import os
-    sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
-    from analytics.app.fetch_prometheus import execute_json_prom_query
-
-    data = request.args
+def delay_filters(data):
+    """Get the label filters from the given data dict in the right form"""
     districts = data.getlist('district[]')
     transport_types = data.getlist('transport_type[]')
     operators = data.getlist('operator[]')
     stop_begins = data.getlist('stop_begin[]')
     stop_ends = data.getlist('stop_end[]')
+    line_numbers = data.getlist('line_number[]')
 
     labels = {
         'district': districts,
         'transport_type': transport_types,
         'operator': operators,
         'stop_begin': stop_begins,
-        'stop_end': stop_ends
+        'stop_end': stop_ends,
+        'line_number': line_numbers
     }
 
     labels = {key: '|'.join(value) for key, value in labels.items()}
-    return_filters = data.getlist('return_filter[]')
-    if 'period' in data:
-        time_range = data['period']
-        days_to_find = [{
-            "increase": {
-                "metric": "location_punctuality",
-                "labels": labels,
-                "period": str(time_range)
-            }
-        }]
-    else:
-        now = datetime.now()
-        seconds_since_midnight = (now - now.replace(hour=0, minute=0, second=0,
-                                                microsecond=0)).total_seconds()
 
-        start_day_time = data.get('start_time', 0, type=int)
-        end_day_time = data.get('end_time', 86400, type=int)
-        valid_days = data.getlist('valid_days')
-        past_days = data.get('past_days', 0, type=int)
-
-        offset = seconds_since_midnight - end_day_time
-        time_range = end_day_time - start_day_time
-        today = datetime.today().weekday()
-
-        inner_query = lambda off_time: {
-            "increase": {
-                "metric": "location_punctuality",
-                "labels": labels,
-                "period": str(time_range) + "s",
-                "offset": str(int(off_time)) + "s"
-            }
+def recent_period_func(func, metric, labels, period):
+    """Make a json query for prometheus which applies a func over a recent period,
+    e.g the last x days"""
+    return [{
+        func: {
+            "metric": metric,
+            "labels": labels,
+            "period": period
         }
+    }]
 
-        days_to_find = []
-        for day in range(past_days + 1):
-            if offset > 0 and (not valid_days or (today - day) % 7 in valid_days):
-                days_to_find.append(inner_query(offset))
-            offset += 86400
+def specific_period_func(func, metric, labels, data):
+    """Make a json query for prometheus which applies a func over a specific period,
+    e.g every tuesday from 4 to 7 PM or yesterday the whole day"""
+    start_day_time = data.get('start_time', 0, type=int)
+    end_day_time = data.get('end_time', 86400, type=int)
+    valid_days = data.getlist('valid_days')
+    past_days = data.get('past_days', 0, type=int)
+
+    now = datetime.now()
+    seconds_since_midnight = int((now - now.replace(hour=0, minute=0, second=0,
+                                            microsecond=0)).total_seconds())
+
+    offset = seconds_since_midnight - end_day_time
+    time_range = end_day_time - start_day_time
+    today = datetime.today().weekday()
+
+    inner_query = lambda off_time: {
+        func: {
+            "metric": metric,
+            "labels": labels,
+            "period": str(time_range) + "s",
+            "offset": str(off_time) + "s"
+        }
+    }
+
+    days_to_find = []
+    for day in range(past_days + 1):
+        if offset > 0 and (not valid_days or (today - day) % 7 in valid_days):
+            days_to_find.append(inner_query(offset))
+        offset += 86400
+    return days_to_find
+
+def heatmap_format(query_result, metric_stop):
+    """Reformat the query_result to get it in heatmap format
+    metric_stop specifies which stop from the metric is used for location"""
+    url = "http://18.224.29.151:5000/get-stops?town=amsterdam"
+    r = requests.get(url)
+    stops_json = r.json()
+    stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
+    return [[*stops[point['metric'][metric_stop]], float(point['value'][1])] for point in query_result]
+
+@app.route('/get_delays', methods=['GET'])
+def get_delays():
+    """Get the delays according to GET arguments; How to exactly use this endpoint,
+    see the analytics wiki."""
+
+    data = request.args
+    labels = delay_filters(data)
+    return_filters = data.getlist('return_filter[]')
+    
+    if 'period' in data:
+        main_query = recent_period_func("increase", "location_punctuality",
+                                          labels, data.get('period', type=str))
+    else:
+        main_query = specific_period_func("increase", "location_punctuality",
+                                            labels, data)
     sample = {
         "sum": {
-            "+": days_to_find
+            "+": main_query
         },
         "by": return_filters
     }
     if 'top' in data:
-        sample = {'topk': {
-            'k': data['top'],
-            'subquery': sample
-        }}
+        sample = {
+            'topk': {
+                'k': data.get('top'),
+                'subquery': sample
+            }
+        }
 
-    query_result = execute_json_prom_query(sample)
+    query_result = analytics.fetch_prometheus.execute_json_prom_query(sample)
+
     if 'format' in data:
         if data['format'] == 'heatmap':
-            url = "http://18.224.29.151:5000/get-stops?town=amsterdam"
-            r = requests.get(url)
-            stops_json = r.json()
-            stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
-            query_result = [[*stops[point['metric']['stop_end']], float(point['value'][1])] for point in query_result]
-        if data['format'] == 'anders':
-            pass
+            query_result = heatmap_format(query_result, 'stop_end')
     return jsonify(query_result)
-
