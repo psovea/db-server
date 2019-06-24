@@ -415,7 +415,9 @@ def heatmap_format(query_result, metric_stop):
     r = requests.get(url)
     stops_json = r.json()
     stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
-    return [[*stops[point['metric'][metric_stop]], float(point['value'][1])] for point in query_result]
+    # Get the largest value of query_result to use it for normalizing
+    max_val = max(query_result, key=lambda x:x['value'][1])
+    return [[*stops[point['metric'][metric_stop]], (float(point['value'][1]) / max_val)] for point in query_result]
 
 @app.route('/get_delays', methods=['GET'])
 def get_delays():
@@ -425,7 +427,7 @@ def get_delays():
     data = request.args
     labels = delay_filters(data)
     return_filters = data.getlist('return_filter[]')
-    
+
     if 'period' in data:
         main_query = recent_period_func("increase", "location_punctuality",
                                           labels, data.get('period', type=str))
