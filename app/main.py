@@ -421,14 +421,14 @@ def heatmap_format(query_result, metric_stop, treshold):
             (float(point['value'][1]) / max_val) * (1 + treshold) - treshold]
             for point in query_result if (float(point['value'][1]) / max_val) > treshold ]
 
-def construct_filtered_query(func, metric, labels, data, return_filters):
+def construct_filtered_query(func, metric, labels, data, return_filters, group_func="sum"):
     """Construct a filtered query depending on all of the above variables"""
     if 'period' in data:
         main_query = recent_period_func(func, metric, labels, data.get('period', type=str))
     else:
         main_query = specific_period_func(func, metric, labels, data)
     return {
-        "sum": {
+        group_func: {
             "+": main_query
         },
         "by": return_filters
@@ -436,7 +436,7 @@ def construct_filtered_query(func, metric, labels, data, return_filters):
 
 def average_sample(sample, data, labels, return_filters):
     """Average the sample using some count"""
-    if data['avg_per'] == "bus_delay":
+    if data['avg_per'] == "vehicle_delay":
         changes = construct_filtered_query("changes", "location_punctuality", labels, data, return_filters)
         sample = {
             '/': [
@@ -445,7 +445,24 @@ def average_sample(sample, data, labels, return_filters):
             ]
         }
     elif data['avg_per'] == "stop":
-        pass
+        # TRAMS are wrongly tracked, and as such many stops have multiple time series
+        # so collapse twice!
+        changes = {
+            "count": {
+                "count": {
+                    "metric": "location_punctuality",
+                    "labels": labels,
+                },
+                'by': return_filters + ['stop_end']
+            },
+            'by': return_filters
+        }
+        sample = {
+            '/': [
+                sample,
+                changes
+            ]
+        }
     return sample
 
 @app.route('/get_delays', methods=['GET'])
