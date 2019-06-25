@@ -128,7 +128,7 @@ def parse_message(message):
             met = location_punctuality_metric(
                 prev, stop, increase, vehicle_num, line_num)
             key = tuple(met['meta'].items())
-            if not key in counters:
+            if key not in counters:
                 counters[key] = 0
             if increase > 0:
                 counters[key] += increase
@@ -152,6 +152,7 @@ def parse_message(message):
             line_info[line_num] = get_line_info(line_num)
 
         if line_info[line_num] is None:
+            print("line info missing for", line_num)
             continue
 
         try:
