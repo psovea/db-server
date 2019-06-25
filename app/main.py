@@ -6,10 +6,10 @@ from datetime import datetime
 
 import sys
 import os
-# sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
-# import analytics.app as analytics
-sys.path.insert(0, 'home/ubuntu/analytics/app')
-import fetch_prometheus as fp
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
+import analytics.app.fetch_prometheus as fp
+# sys.path.insert(0, 'home/ubuntu/analytics/app')
+# import fetch_prometheus as fp
 
 import json
 import requests
@@ -408,7 +408,7 @@ def specific_period_func(func, metric, labels, data):
         offset += 86400
     return days_to_find
 
-def heatmap_format(query_result, metric_stop):
+def heatmap_format(query_result, metric_stop, treshold):
     """Reformat the query_result to get it in heatmap format
     metric_stop specifies which stop from the metric is used for location"""
     url = "http://18.224.29.151:5000/get-stops?town=amsterdam"
@@ -416,8 +416,37 @@ def heatmap_format(query_result, metric_stop):
     stops_json = r.json()
     stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
     # Get the largest value of query_result to use it for normalizing
-    max_val = max(query_result, key=lambda x:x['value'][1])
-    return [[*stops[point['metric'][metric_stop]], (float(point['value'][1]) / max_val)] for point in query_result]
+    max_val = float(max(query_result, key=lambda x:x['value'][1], default=1)['value'][1])
+    return [[*stops[point['metric'][metric_stop]],
+            (float(point['value'][1]) / max_val) * (1 + treshold) - treshold]
+            for point in query_result if (float(point['value'][1]) / max_val) > treshold ]
+
+def construct_filtered_query(func, metric, labels, data, return_filters):
+    """Construct a filtered query depending on all of the above variables"""
+    if 'period' in data:
+        main_query = recent_period_func(func, metric, labels, data.get('period', type=str))
+    else:
+        main_query = specific_period_func(func, metric, labels, data)
+    return {
+        "sum": {
+            "+": main_query
+        },
+        "by": return_filters
+    }
+
+def average_sample(sample, data, labels, return_filters):
+    """Average the sample using some count"""
+    if data['avg_per'] == "bus_delay":
+        changes = construct_filtered_query("changes", "location_punctuality", labels, data, return_filters)
+        sample = {
+            '/': [
+                sample,
+                changes
+            ]
+        }
+    elif data['avg_per'] == "stop":
+        pass
+    return sample
 
 @app.route('/get_delays', methods=['GET'])
 def get_delays():
@@ -428,18 +457,10 @@ def get_delays():
     labels = delay_filters(data)
     return_filters = data.getlist('return_filter[]')
 
-    if 'period' in data:
-        main_query = recent_period_func("increase", "location_punctuality",
-                                          labels, data.get('period', type=str))
-    else:
-        main_query = specific_period_func("increase", "location_punctuality",
-                                            labels, data)
-    sample = {
-        "sum": {
-            "+": main_query
-        },
-        "by": return_filters
-    }
+    sample = construct_filtered_query("increase", "location_punctuality", labels, data, return_filters)
+    if 'avg_per' in data:
+        sample = average_sample(sample, data, labels, return_filters)
+        
     if 'top' in data:
         sample = {
             'topk': {
@@ -452,5 +473,5 @@ def get_delays():
 
     if 'format' in data:
         if data['format'] == 'heatmap':
-            query_result = heatmap_format(query_result, 'stop_end')
+            query_result = heatmap_format(query_result, 'stop_end', data.get("heatmap_treshold", default=0))
     return jsonify(query_result)
