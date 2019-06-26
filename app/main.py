@@ -352,7 +352,7 @@ def get_line_info():
 
     for i, line_stop in enumerate(line_info):
         if (line_stop["order_number"] <=
-            line_info[prev_order_id]["order_number"]):
+                line_info[prev_order_id]["order_number"]):
             line_info_list.append(line_info[prev_order_id:i])
             prev_order_id = i
 
