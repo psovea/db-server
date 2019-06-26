@@ -6,18 +6,20 @@ from datetime import datetime
 
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
-import analytics.app.fetch_prometheus as fp
 
 import json
 import requests
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
+import analytics.app.fetch_prometheus as fp
 
 REMOTEPROMINSERT = False
 
 app = Flask(__name__)
 
-def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_obj):
-    """Returns an object for a transport line to be placed in the db"""
+
+def make_transport_line(operator_id, dir_id, line_id, transport_type_id,
+                        line_obj):
+    """Return an object for a transport line to be placed in the db."""
     return {"operator_id": operator_id,
             "direction_id": dir_id,
             "internal_id": line_id,
@@ -30,7 +32,7 @@ def make_transport_line(operator_id, dir_id, line_id, transport_type_id, line_ob
 
 
 def get_transport_line(tup):
-    """Returns an object for a transport line to send through the endpoint"""
+    """Return an object for a transport line to send through the endpoint."""
     operator, int_id, pub_id, name, dest, direction, trans_type, stops = tup
     return {
         "direction": direction,
@@ -45,7 +47,7 @@ def get_transport_line(tup):
 
 
 def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
-    """Returns a stop object to be placed in the database"""
+    """Return a stop object to be placed in the database."""
     return {
         "stop_code": stop_id,
         "lat": lat,
@@ -59,8 +61,9 @@ def make_stop(stop_id, lat, lon, name, town, area_code, access_wc, access_vi):
 
 
 def get_stop(tup):
-    """Returns a stop object to send through the endpoint"""
-    stop_id, lat, lon, name, town, area_code, access_wc, access_vi, district = tup
+    """Return a stop object to send through the endpoint."""
+    (stop_id, lat, lon, name, town, area_code, access_wc, access_vi,
+     district) = tup
     return {
         "stop_code": stop_id,
         "lat": lat,
@@ -77,7 +80,7 @@ def get_stop(tup):
 
 
 def make_transport_line_stop(transport_line_id, stop_id, order):
-    """Returns a transport line stop object to be placed in the database"""
+    """Return a transport line stop object to be placed in the database."""
     return {
         "transport_line_id": transport_line_id,
         "stop_id": stop_id,
@@ -86,7 +89,7 @@ def make_transport_line_stop(transport_line_id, stop_id, order):
 
 
 def get_transport_line_stop(tup):
-    """Returns a transport line stop object to send through the endpoint"""
+    """Return a transport line stop object to send through the endpoint."""
     stop_code, stop_name, order_number, int_id, direction = tup
     return {
         "stop_code": stop_code,
@@ -95,6 +98,7 @@ def get_transport_line_stop(tup):
         "internal_id": int_id,
         "direction": direction
     }
+
 
 if REMOTEPROMINSERT:
     from insert_server import PromInsertServer
@@ -134,7 +138,7 @@ def insert_static_stops():
         access_vi = 1 if stop["accessibility"]["visual"] else 0
 
         insert_obj = make_stop(stop_id, lat, lon, name, town, area_code,
-                access_wc, access_vi)
+                               access_wc, access_vi)
 
         try:
             sql.getOrInsert("stops", insert_obj, insert_obj)
@@ -161,11 +165,13 @@ def insert_static():
         for line_id in data[operator].keys():
             line_obj = data[operator][line_id]
             transport_type_id = sql.getId("transport_types",
-                    {"name": line_obj["transportType"]})
+                                          {"name": line_obj["transportType"]})
             internal_id = line_obj["lineCode"]
 
-            transport_line_obj = make_transport_line(operator_id, line_id, internal_id,
-                    transport_type_id, line_obj)
+            transport_line_obj = make_transport_line(operator_id, line_id,
+                                                     internal_id,
+                                                     transport_type_id,
+                                                     line_obj)
 
             try:
                 sql.getOrInsert("transport_lines", transport_line_obj,
@@ -174,11 +180,11 @@ def insert_static():
                 # connect every stop with a line id
                 for stop in line_obj["stops"]:
                     stop_id = sql.getId("stops",
-                            {"stop_code": stop["stopCode"]})
-
+                                        {"stop_code": stop["stopCode"]})
 
                     transport_line_id = sql.getId("transport_lines",
-                            {"direction_id": line_id, "operator_id": operator_id})
+                                                  {"direction_id": line_id,
+                                                   "operator_id": operator_id})
                     order = stop["orderNumber"]
 
                     transport_line_stop = make_transport_line_stop(
@@ -191,29 +197,37 @@ def insert_static():
                 print(e)
     return "Successfully inserted data into MySQL."
 
+
 @app.route('/match-districts-with-stops', methods=['GET'])
 def bind_stops_to_districts():
-    """Takes stop-code to district mappings from bind_stop_code_to_district.py
-    and inserts them into the database."""
+    """
+    Take stop-code to district mappings from bind_stop_code_to_district.py.
+
+    and inserts them into the database.
+    """
     sql = MysqlConnector()
     bindings = bind_stop_code_to_district.get_stop_to_district_binds()
     for data in bindings:
-        district_id = sql.getOrInsert('districts', {'name': data['district']}, {'name': data['district']})
-        query = "UPDATE stops SET district_id = {} WHERE stop_code = '{}'".format(district_id, data['stop_code'])
+        district_id = sql.getOrInsert('districts', {'name': data['district']},
+                                      {'name': data['district']})
+        query = ("UPDATE stops SET district_id = {} WHERE stop_code = " +
+                 "'{}'".format(district_id, data['stop_code']))
         sql.execQuery(query, no_result=True)
         print("{} -> {}".format(data['stop_code'], data['district']))
     return "Done!"
 
+
 @app.route('/get-line-mapping', methods=['GET'])
 def get_line_mapping():
+    """"""
     sql = MysqlConnector()
     dicts = {a: b for a, b in sql.getLineToTypeMapping()}
     return json.dumps(dicts)
 
+
 @app.route('/get-stops', methods=['GET'])
 def get_stops():
     """Get stops from the MySQL DB."""
-
     stop_code = request.args.get("stop_code", default="%", type=str).split(",")
     lat = request.args.get("lat", default="%", type=str).split(",")
     lon = request.args.get("lon", default="%", type=str).split(",")
@@ -226,7 +240,9 @@ def get_stops():
 
     sql = MysqlConnector()
 
-    keys = ["stop_code", "lat", "lon", "stops.name", "town", "area_code", "accessibility_wheelchair", "accessibility_visual", "districts.name"]
+    keys = (["stop_code", "lat", "lon", "stops.name", "town", "area_code",
+             "accessibility_wheelchair", "accessibility_visual",
+             "districts.name"])
 
     search_values = {
         "stop_code": stop_code,
@@ -246,7 +262,8 @@ def get_stops():
 
     query = build_query('stops', keys, search_values, join)
 
-    return json.dumps([get_stop(stop) for stop in sql.execQuery(query)]), {'Content-Type': 'application/json'}
+    return (json.dumps([get_stop(stop) for stop in sql.execQuery(query)]),
+            {'Content-Type': 'application/json'})
 
 
 @app.route('/get-lines', methods=['GET'])
@@ -279,18 +296,22 @@ def get_lines():
 
     join = {
         "operators": ("transport_lines.operator_id", "operators.id"),
-        "transport_types": ("transport_lines.transport_type_id", "transport_types.id")
+        "transport_types": ("transport_lines.transport_type_id",
+                            "transport_types.id")
     }
 
     query = build_query("transport_lines", search_values.keys(),
                         search_values, inner_join=join)
-    return json.dumps([get_transport_line(line) for line in sql.execQuery(query)]), {"Content-Type": "application/json"}
+    return (json.dumps([get_transport_line(line) for line
+            in sql.execQuery(query)]), {"Content-Type": "application/json"})
 
 
 @app.route('/get-line-info', methods=['GET'])
 def get_line_info():
-    """Get the information for one or more spetop_ten_bottleneckscific lines, like the route
-       that line takes from the MySQL DB.
+    """
+    Get the information for one or more spescific lines.
+
+    like the route that line takes from the MySQL DB.
     """
     internal_ids = request.args.get(
         "internal_id", default="%", type=str).split(",")
@@ -300,7 +321,9 @@ def get_line_info():
     sql = MysqlConnector()
     line_info_list = []
     keys = ["stops.stop_code", "stops.name",
-            "transport_lines_stops.order_number", "transport_lines.internal_id", "transport_lines.direction"]
+            "transport_lines_stops.order_number",
+            "transport_lines.internal_id",
+            "transport_lines.direction"]
 
     search_values = {
             "transport_lines.internal_id": internal_ids,
@@ -309,8 +332,10 @@ def get_line_info():
         }
 
     join = {
-            "transport_lines_stops": ("stops.id", "transport_lines_stops.stop_id"),
-            "transport_lines": ("transport_lines_stops.transport_line_id", "transport_lines.id"),
+            "transport_lines_stops": ("stops.id",
+                                      "transport_lines_stops.stop_id"),
+            "transport_lines": ("transport_lines_stops.transport_line_id",
+                                "transport_lines.id"),
             "operators": ("transport_lines.operator_id", "operators.id")
         }
 
@@ -336,11 +361,13 @@ def get_line_info():
 
 @app.route('/get-districts', methods=['GET'])
 def get_districts():
-    return send_from_directory("../static", "districts.geojson"), {'Content-Type': 'application/json'}
+    """Get districts information from database."""
+    return (send_from_directory("../static", "districts.geojson"),
+            {'Content-Type': 'application/json'})
 
 
 def delay_filters(data):
-    """Get the label filters from the given data dict in the right form"""
+    """Get the label filters from the given data dict in the right form."""
     districts = data.getlist('district[]')
     transport_types = data.getlist('transport_type[]')
     operators = data.getlist('operator[]')
@@ -359,9 +386,13 @@ def delay_filters(data):
 
     return {key: '|'.join(value) for key, value in labels.items()}
 
+
 def recent_period_func(func, metric, labels, period):
-    """Make a json query for prometheus which applies a func over a recent period,
-    e.g the last x days"""
+    """
+    Make a query for prometheus which applies a func over a recent periodself.
+
+    e.g the last x days
+    """
     return [{
         func: {
             "metric": metric,
@@ -370,9 +401,13 @@ def recent_period_func(func, metric, labels, period):
         }
     }]
 
+
 def specific_period_func(func, metric, labels, data):
-    """Make a json query for prometheus which applies a func over a specific period,
-    e.g every tuesday from 4 to 7 PM or yesterday the whole day"""
+    """
+    Make a query for prometheus which applies a func over a specific period.
+
+    e.g every tuesday from 4 to 7 PM or yesterday the whole day
+    """
     start_day_time = data.get('start_time', 0, type=int)
     end_day_time = data.get('end_time', 86400, type=int)
     valid_days = data.getlist('valid_days[]')
@@ -380,7 +415,8 @@ def specific_period_func(func, metric, labels, data):
 
     now = datetime.now()
     seconds_since_midnight = int((now - now.replace(hour=0, minute=0, second=0,
-                                            microsecond=0)).total_seconds())
+                                                    microsecond=0))
+                                 .total_seconds())
 
     offset = seconds_since_midnight - end_day_time
     time_range = end_day_time - start_day_time
@@ -402,24 +438,34 @@ def specific_period_func(func, metric, labels, data):
         offset += 86400
     return days_to_find
 
+
 def heatmap_format(query_result, metric_stop, treshold):
-    """Reformat the query_result to get it in heatmap format
-    metric_stop specifies which stop from the metric is used for location"""
+    """
+    Reformat the query_result to get it in heatmap format.
+
+    metric_stop specifies which stop from the metric is used for location
+    """
     url = "http://18.224.29.151:5000/get-stops?town=amsterdam"
     r = requests.get(url)
     stops_json = r.json()
-    stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
+    stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop
+             in stops_json}
 
     # Get the largest value of query_result to use it for normalizing
-    max_val = float(max(query_result, key=lambda x:x['value'][1], default=1)['value'][1])
+    max_val = float(max(query_result, key=lambda x: x['value'][1],
+                        default=1)['value'][1])
     return [[*stops[point['metric'][metric_stop]],
             (float(point['value'][1]) / max_val) * (1 + treshold) - treshold]
-            for point in query_result if (float(point['value'][1]) / max_val) > treshold ]
+            for point in query_result if (float(point['value'][1])
+            / max_val) > treshold]
 
-def construct_filtered_query(func, metric, labels, data, return_filters, group_func="sum"):
-    """Construct a filtered query depending on all of the above variables"""
+
+def construct_filtered_query(func, metric, labels, data, return_filters,
+                             group_func="sum"):
+    """Construct a filtered query depending on all of the above variables."""
     if 'period' in data:
-        main_query = recent_period_func(func, metric, labels, data.get('period', type=str))
+        main_query = recent_period_func(func, metric, labels,
+                                        data.get('period', type=str))
     else:
         main_query = specific_period_func(func, metric, labels, data)
     return {
@@ -429,10 +475,12 @@ def construct_filtered_query(func, metric, labels, data, return_filters, group_f
         "by": return_filters
     }
 
+
 def average_sample(sample, data, labels, return_filters):
-    """Average the sample using some count"""
+    """Average the sample using some count."""
     if data['avg_per'] == "vehicle_delay":
-        changes = construct_filtered_query("changes", "location_punctuality", labels, data, return_filters)
+        changes = construct_filtered_query("changes", "location_punctuality",
+                                           labels, data, return_filters)
         sample = {
             '/': [
                 sample,
@@ -440,8 +488,8 @@ def average_sample(sample, data, labels, return_filters):
             ]
         }
     elif data['avg_per'] == "stop":
-        # TRAMS are wrongly tracked, and as such many stops have multiple time series
-        # so collapse twice!
+        # TRAMS are wrongly tracked, and as such many stops have multiple time
+        # series so collapse twice!
         changes = {
             "count": {
                 "count": {
@@ -460,16 +508,20 @@ def average_sample(sample, data, labels, return_filters):
         }
     return sample
 
+
 @app.route('/get_delays', methods=['GET'])
 def get_delays():
-    """Get the delays according to GET arguments; How to exactly use this endpoint,
-    see the analytics wiki."""
+    """
+    Get the delays according to GET argumentsself.
 
+    How to exactly use this endpoint, see the analytics wiki.
+    """
     data = request.args
     labels = delay_filters(data)
     return_filters = data.getlist('return_filter[]')
 
-    sample = construct_filtered_query("increase", "location_punctuality", labels, data, return_filters)
+    sample = construct_filtered_query("increase", "location_punctuality",
+                                      labels, data, return_filters)
     if 'avg_per' in data:
         sample = average_sample(sample, data, labels, return_filters)
 
@@ -485,5 +537,7 @@ def get_delays():
 
     if 'format' in data:
         if data['format'] == 'heatmap':
-            query_result = heatmap_format(query_result, 'stop_end', data.get("heatmap_treshold", default=0))
+            query_result = heatmap_format(query_result, 'stop_end',
+                                          data.get("heatmap_treshold",
+                                                   default=0))
     return jsonify(query_result)

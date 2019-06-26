@@ -9,9 +9,7 @@ GEOJSON_URL = "http://184.72.120.43:3000/districts"
 
 
 def get_stop_to_district_binds():
-    """
-    Function which reads stop data and district coordinate data
-    """
+    """Function which reads stop data and district coordinate data"""
     r1 = requests.get(STOP_URL)
     stops = r1.json()
 
