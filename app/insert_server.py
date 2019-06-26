@@ -1,6 +1,4 @@
 from prometheus_client import start_http_server, Metric, REGISTRY
-# from kv6 import counters
-
 
 class PromInsertServer:
     def __init__(self, port=8000, counters={}):

@@ -42,10 +42,11 @@ def stop_URL(stop_code):
 
 def filter_messages(tp, obj):
     """ Filter arrivals on type and line number """
-    return list(obj.keys())[0] == tp  # and obj[tp]['lineplanningnumber'] == line_num
+    return list(obj.keys())[0] == tp
 
 
 def get_line_info(line):
+    """ Request info of line from database. """
     URL = line_URL(line, OPERATOR)
     try:
         data = requests.get(url=URL).json()
@@ -56,6 +57,7 @@ def get_line_info(line):
 
 
 def get_stop_info(stop_code):
+    """ Request info per stop from database. """
     URL = stop_URL(stop_code)
     try:
         data = requests.get(url=URL).json()
@@ -66,7 +68,7 @@ def get_stop_info(stop_code):
 
 
 def location_punctuality_metric(begin, end, increase, vehicle_number, line_number):
-    """Create a location punctuality metric from the given variables"""
+    """ Create a location punctuality metric from the given variables. """
     district = None
 
     try:
@@ -94,25 +96,16 @@ def location_punctuality_metric(begin, end, increase, vehicle_number, line_numbe
     }
 
 
-def parse_message(message):
-    pos_info = None
-
-    try:
-        data = message['VV_TM_PUSH']['KV6posinfo']
-        pos_info = [data] if type(data) is dict else data
-    except KeyError as e:
-        return []
-
-    arrivals = [el for el in pos_info if filter_messages(ARRIVAL, el)]
-    departures = [el for el in pos_info if filter_messages(DEPARTURE, el)]
-
+def parse_arrivals(arrivals):
+    """ Parse the arrival messages from ndovloket such that, using the departure
+    info, the increase in punctuality for a vehicle can be calculated and
+    is added to the appropriate counter(s)."""
     for obj in arrivals:
         obj = obj[ARRIVAL]
         punc = int(obj['punctuality'])
         line_num = obj['lineplanningnumber']
         vehicle_num = obj['vehiclenumber']
 
-        prefix = None
         try:
             prefix = prefix_dict[obj['dataownercode']]
         except KeyError:
@@ -135,13 +128,17 @@ def parse_message(message):
         except KeyError:
             continue
 
+
+def parse_departures(departures):
+    """ Parse the departure messages from ndovloket such that the data in
+    tracking variables is correct for when the vehicle arrives at another
+    stop. """
     for obj in departures:
         obj = obj[DEPARTURE]
         punc = int(obj['punctuality'])
         line_num = obj['lineplanningnumber']
         vehicle_num = obj['vehiclenumber']
 
-        prefix = None
         try:
             prefix = prefix_dict[obj['dataownercode']]
         except KeyError:
@@ -170,12 +167,30 @@ def parse_message(message):
             }
 
 
+def parse_message(message):
+    """ Parse the message from ndovloket for arrivals and departures
+    for location_punctuality. """
+    try:
+        data = message['VV_TM_PUSH']['KV6posinfo']
+        pos_info = [data] if type(data) is dict else data
+    except KeyError as e:
+        return []
+
+    arrivals = [el for el in pos_info if filter_messages(ARRIVAL, el)]
+    departures = [el for el in pos_info if filter_messages(DEPARTURE, el)]
+
+    parse_arrivals(arrivals)
+    parse_departures(departures)
+
+
 def ordered_dict_to_dict(od):
     """ hacky way to create regular dict from ordered dict. """
     return json.loads(json.dumps(od))
 
 
 if __name__ == '__main__':
+    """ If run as main, then set up a prometheus client and pass the inside
+    of the counters to be scraped. """
     from insert_server import PromInsertServer
     server = PromInsertServer(8001, counters)
     while True:

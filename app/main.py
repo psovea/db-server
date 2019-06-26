@@ -423,6 +423,7 @@ def heatmap_format(query_result, metric_stop, treshold):
             for point in query_result if point['metric'][metric_stop] in stops
             and (float(point['value'][1]) / max_val) > treshold ]
 
+
 def construct_filtered_query(func, metric, labels, data, return_filters, group_func="sum"):
     """Construct a filtered query depending on all of the above variables"""
     if 'period' in data:
@@ -440,12 +441,6 @@ def average_sample(sample, data, labels, return_filters):
     """Average the sample using some count"""
     if data['avg_per'] == "vehicle_delay":
         changes = construct_filtered_query("changes", "location_punctuality", labels, data, return_filters)
-        sample = {
-            '/': [
-                sample,
-                changes
-            ]
-        }
     elif data['avg_per'] == "stop":
         # TRAMS are wrongly tracked, and as such many stops have multiple time series
         # so collapse twice!
@@ -459,13 +454,14 @@ def average_sample(sample, data, labels, return_filters):
             },
             'by': return_filters
         }
-        sample = {
-            '/': [
-                sample,
-                changes
-            ]
-        }
-    return sample
+    else:
+        return sample
+    return {
+        '/': [
+            sample,
+            changes
+        ]
+    }
 
 @app.route('/get_delays', methods=['GET'])
 def get_delays():
