@@ -42,10 +42,11 @@ def stop_URL(stop_code):
 
 def filter_messages(tp, obj):
     """ Filter arrivals on type and line number """
-    return list(obj.keys())[0] == tp  # and obj[tp]['lineplanningnumber'] == line_num
+    return list(obj.keys())[0] == tp
 
 
 def get_line_info(line):
+    """ Request info of line from database. """
     URL = line_URL(line, OPERATOR)
     try:
         data = requests.get(url=URL).json()
@@ -56,6 +57,7 @@ def get_line_info(line):
 
 
 def get_stop_info(stop_code):
+    """ Request info per stop from database. """
     URL = stop_URL(stop_code)
     try:
         data = requests.get(url=URL).json()
@@ -93,19 +95,8 @@ def location_punctuality_metric(begin, end, increase, vehicle_number, line_numbe
         }
     }
 
-
-def parse_message(message):
-    pos_info = None
-
-    try:
-        data = message['VV_TM_PUSH']['KV6posinfo']
-        pos_info = [data] if type(data) is dict else data
-    except KeyError as e:
-        return []
-
-    arrivals = [el for el in pos_info if filter_messages(ARRIVAL, el)]
-    departures = [el for el in pos_info if filter_messages(DEPARTURE, el)]
-
+def parse_arrivals(arrivals):
+    """ """
     for obj in arrivals:
         obj = obj[ARRIVAL]
         punc = int(obj['punctuality'])
@@ -135,6 +126,8 @@ def parse_message(message):
         except KeyError:
             continue
 
+def parse_departures(departures):
+    """ """
     for obj in departures:
         obj = obj[DEPARTURE]
         punc = int(obj['punctuality'])
@@ -168,6 +161,24 @@ def parse_message(message):
                 'operator': line_info[line_num]['operator'],
                 'arrived': False
             }
+
+
+def parse_message(message):
+    """ """
+    pos_info = None
+
+    try:
+        data = message['VV_TM_PUSH']['KV6posinfo']
+        pos_info = [data] if type(data) is dict else data
+    except KeyError as e:
+        return []
+
+    arrivals = [el for el in pos_info if filter_messages(ARRIVAL, el)]
+    departures = [el for el in pos_info if filter_messages(DEPARTURE, el)]
+
+    parse_arrivals(arrivals)
+    parse_departures(departures)
+
 
 
 def ordered_dict_to_dict(od):
