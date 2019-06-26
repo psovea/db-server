@@ -416,10 +416,12 @@ def heatmap_format(query_result, metric_stop, treshold):
     stops_json = r.json()
     stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
     # Get the largest value of query_result to use it for normalizing
-    max_val = float(max(query_result, key=lambda x:x['value'][1], default=1)['value'][1])
+    max_val = float(max(query_result, key=lambda x:x['value'][1],
+                        default={'value': [0, 1]})['value'][1])
     return [[*stops[point['metric'][metric_stop]],
             (float(point['value'][1]) / max_val) * (1 + treshold) - treshold]
-            for point in query_result if (float(point['value'][1]) / max_val) > treshold ]
+            for point in query_result if point['metric'][metric_stop] in stops
+            and (float(point['value'][1]) / max_val) > treshold ]
 
 def construct_filtered_query(func, metric, labels, data, return_filters, group_func="sum"):
     """Construct a filtered query depending on all of the above variables"""
