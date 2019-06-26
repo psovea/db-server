@@ -452,12 +452,22 @@ def heatmap_format(query_result, metric_stop, treshold):
              in stops_json}
 
     # Get the largest value of query_result to use it for normalizing
+<<<<<<< HEAD
     max_val = float(max(query_result, key=lambda x: x['value'][1],
                         default=1)['value'][1])
     return [[*stops[point['metric'][metric_stop]],
             (float(point['value'][1]) / max_val) * (1 + treshold) - treshold]
             for point in query_result if (float(point['value'][1])
             / max_val) > treshold]
+=======
+    max_val = float(max(query_result, key=lambda x:x['value'][1],
+                        default={'value': [0, 1]})['value'][1])
+    return [[*stops[point['metric'][metric_stop]],
+            (float(point['value'][1]) / max_val) * (1 + treshold) - treshold]
+            for point in query_result if point['metric'][metric_stop] in stops
+            and (float(point['value'][1]) / max_val) > treshold ]
+
+>>>>>>> master
 
 
 def construct_filtered_query(func, metric, labels, data, return_filters,
@@ -479,6 +489,7 @@ def construct_filtered_query(func, metric, labels, data, return_filters,
 def average_sample(sample, data, labels, return_filters):
     """Average the sample using some count."""
     if data['avg_per'] == "vehicle_delay":
+<<<<<<< HEAD
         changes = construct_filtered_query("changes", "location_punctuality",
                                            labels, data, return_filters)
         sample = {
@@ -487,6 +498,9 @@ def average_sample(sample, data, labels, return_filters):
                 changes
             ]
         }
+=======
+        changes = construct_filtered_query("changes", "location_punctuality", labels, data, return_filters)
+>>>>>>> master
     elif data['avg_per'] == "stop":
         # TRAMS are wrongly tracked, and as such many stops have multiple time
         # series so collapse twice!
@@ -500,13 +514,14 @@ def average_sample(sample, data, labels, return_filters):
             },
             'by': return_filters
         }
-        sample = {
-            '/': [
-                sample,
-                changes
-            ]
-        }
-    return sample
+    else:
+        return sample
+    return {
+        '/': [
+            sample,
+            changes
+        ]
+    }
 
 
 @app.route('/get_delays', methods=['GET'])

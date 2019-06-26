@@ -97,14 +97,15 @@ def location_punctuality_metric(begin, end, increase, vehicle_number,
 
 
 def parse_arrivals(arrivals):
-    """ """
+    """ Parse the arrival messages from ndovloket such that, using the departure
+    info, the increase in punctuality for a vehicle can be calculated and
+    is added to the appropriate counter(s)."""
     for obj in arrivals:
         obj = obj[ARRIVAL]
         punc = int(obj['punctuality'])
         line_num = obj['lineplanningnumber']
         vehicle_num = obj['vehiclenumber']
 
-        prefix = None
         try:
             prefix = prefix_dict[obj['dataownercode']]
         except KeyError:
@@ -129,14 +130,15 @@ def parse_arrivals(arrivals):
 
 
 def parse_departures(departures):
-    """ """
+    """ Parse the departure messages from ndovloket such that the data in
+    tracking variables is correct for when the vehicle arrives at another
+    stop. """
     for obj in departures:
         obj = obj[DEPARTURE]
         punc = int(obj['punctuality'])
         line_num = obj['lineplanningnumber']
         vehicle_num = obj['vehiclenumber']
 
-        prefix = None
         try:
             prefix = prefix_dict[obj['dataownercode']]
         except KeyError:
@@ -166,9 +168,8 @@ def parse_departures(departures):
 
 
 def parse_message(message):
-    """ """
-    pos_info = None
-
+    """ Parse the message from ndovloket for arrivals and departures
+    for location_punctuality. """
     try:
         data = message['VV_TM_PUSH']['KV6posinfo']
         pos_info = [data] if type(data) is dict else data
@@ -188,6 +189,8 @@ def ordered_dict_to_dict(od):
 
 
 if __name__ == '__main__':
+    """ If run as main, then set up a prometheus client and pass the inside
+    of the counters to be scraped. """
     from insert_server import PromInsertServer
     server = PromInsertServer(8001, counters)
     while True:
