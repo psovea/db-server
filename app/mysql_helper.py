@@ -3,6 +3,7 @@ from environs import Env
 
 
 def build_query(table, keys, search_values, inner_join=None, order_by=None, split_search=True):
+    """ """
     if split_search:
         search_params = " AND  ".join([
             " OR ".join(["{} LIKE '{}'".format(key, val) for val in values])
@@ -28,6 +29,7 @@ def build_query(table, keys, search_values, inner_join=None, order_by=None, spli
 
 class MysqlConnector:
     def __init__(self):
+        """ """
         env = Env()
         env.read_env()
         host = env.str("DB_HOST")
@@ -42,7 +44,9 @@ class MysqlConnector:
         else:
             print("Can't connect to DB...")
 
+
     def execQuery(self, query, only_one=False, no_result=False):
+        """ """
         self.cursor.execute(query)
 
         if no_result:
@@ -57,7 +61,9 @@ class MysqlConnector:
         res = self.cursor.fetchall()
         return res
 
+
     def getId(self, table, search_values):
+        """ """
         first_search_key, first_search_value = next(
             iter(search_values.items()))
         query = "SELECT id FROM {} WHERE {} = '{}'".format(
@@ -71,7 +77,9 @@ class MysqlConnector:
             return id[0]
         return None
 
+
     def insert(self, table, insert_values):
+        """ """
         keys = ','.join(list(insert_values.keys()))
         values = ','.join(
             ["'{}'".format(value) for value in list(insert_values.values())])
@@ -80,13 +88,17 @@ class MysqlConnector:
         self.connection.commit()
         return self.cursor.lastrowid
 
+
     def getOrInsert(self, table, search_values, insert_values):
+        """ """
         id = self.getId(table, search_values)
         if id:
             return id
         return self.insert(table, insert_values)
 
+
     def getLineToTypeMapping(self):
+        """ """
         query = "SELECT transport_lines.public_id, transport_types.name FROM transport_lines LEFT JOIN transport_types ON transport_type_id = transport_types.id"
         self.cursor.execute(query)
         return self.cursor.fetchall()
