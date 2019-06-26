@@ -8,8 +8,6 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../..")
 import analytics.app.fetch_prometheus as fp
-# sys.path.insert(0, 'home/ubuntu/analytics/app')
-# import fetch_prometheus as fp
 
 import json
 import requests
@@ -111,8 +109,6 @@ if REMOTEPROMINSERT:
             meta = data_point['meta']
             metrics = data_point['metrics']
             for metric_name, value in metrics.items():
-                # TODO: Let API send metric type (gauge? counter?) and process
-                # the metric type in this function.
                 server.insert_into_prom(metric_name, value, meta)
         return "Successfully inserted metrics into PrometheusDB."
 
@@ -221,7 +217,6 @@ def get_stops():
     stop_code = request.args.get("stop_code", default="%", type=str).split(",")
     lat = request.args.get("lat", default="%", type=str).split(",")
     lon = request.args.get("lon", default="%", type=str).split(",")
-    # TODO: handle stop names with spaces in them (aka almost all of them).
     name = request.args.get("name", default="%", type=str).split(",")
     town = request.args.get("town", default="%", type=str).split(",")
     area_code = request.args.get("area_code", default="%", type=str).split(",")
@@ -261,7 +256,6 @@ def get_lines():
     internal_id = request.args.get(
         "internal_id", default="%", type=str).split(",")
     public_id = request.args.get("public_id", default="%", type=str).split(",")
-    # TODO: handle destination names with spaces.
     name = request.args.get("name", default="%", type=str).split(",")
     destination_name = request.args.get(
         "destination", default="%", type=str).split(",")
@@ -415,6 +409,7 @@ def heatmap_format(query_result, metric_stop, treshold):
     r = requests.get(url)
     stops_json = r.json()
     stops = {stop['stop_code']: (stop['lat'], stop['lon']) for stop in stops_json}
+
     # Get the largest value of query_result to use it for normalizing
     max_val = float(max(query_result, key=lambda x:x['value'][1], default=1)['value'][1])
     return [[*stops[point['metric'][metric_stop]],
@@ -477,7 +472,7 @@ def get_delays():
     sample = construct_filtered_query("increase", "location_punctuality", labels, data, return_filters)
     if 'avg_per' in data:
         sample = average_sample(sample, data, labels, return_filters)
-        
+
     if 'top' in data:
         sample = {
             'topk': {
