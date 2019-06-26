@@ -346,12 +346,13 @@ def get_line_info():
     query = build_query("stops", keys, search_values, join,
                         order)
     line_info = [get_transport_line_stop(line_stop)
-                           for line_stop in sql.execQuery(query)]
+                 for line_stop in sql.execQuery(query)]
 
     prev_order_id = 0
 
     for i, line_stop in enumerate(line_info):
-        if line_stop["order_number"] <= line_info[prev_order_id]["order_number"]:
+        if (line_stop["order_number"] <=
+            line_info[prev_order_id]["order_number"]):
             line_info_list.append(line_info[prev_order_id:i])
             prev_order_id = i
 
@@ -452,7 +453,7 @@ def heatmap_format(query_result, metric_stop, treshold):
              in stops_json}
 
     # Get the largest value of query_result to use it for normalizing
-    max_val = float(max(query_result, key=lambda x:x['value'][1],
+    max_val = float(max(query_result, key=lambda x: x['value'][1],
                         default={'value': [0, 1]})['value'][1])
     return [[*stops[point['metric'][metric_stop]],
             (float(point['value'][1]) / max_val) * (1 + treshold) - treshold]
