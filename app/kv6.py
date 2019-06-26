@@ -29,24 +29,23 @@ prefix_dict = {"GVB": "300"}
 
 
 def line_URL(line, operator):
-    """ URL for retrieving information regarding a vehicle type from the database """
-    return "http://18.224.29.151:5000/get-lines?public_id={}&operator={}".format(
-        line,
-        operator)
+    """Make URL for retrieving information regarding a vehicle type."""
+    return ("http://18.224.29.151:5000/get-lines?public_id={}&operator={}"
+            .format(line, operator))
 
 
 def stop_URL(stop_code):
-    """ URL for retrieving information regarding a stop from the database """
+    """URL for retrieving information regarding a stop from the database."""
     return "http://18.224.29.151:5000/get-stops?stop_code={}".format(stop_code)
 
 
 def filter_messages(tp, obj):
-    """ Filter arrivals on type and line number """
+    """Filter arrivals on type and line number."""
     return list(obj.keys())[0] == tp
 
 
 def get_line_info(line):
-    """ Request info of line from database. """
+    """Request info of line from database."""
     URL = line_URL(line, OPERATOR)
     try:
         data = requests.get(url=URL).json()
@@ -57,7 +56,7 @@ def get_line_info(line):
 
 
 def get_stop_info(stop_code):
-    """ Request info per stop from database. """
+    """Request info per stop from database."""
     URL = stop_URL(stop_code)
     try:
         data = requests.get(url=URL).json()
@@ -67,8 +66,9 @@ def get_stop_info(stop_code):
     return None if data == [] else data[0]
 
 
-def location_punctuality_metric(begin, end, increase, vehicle_number, line_number):
-    """ Create a location punctuality metric from the given variables. """
+def location_punctuality_metric(begin, end, increase, vehicle_number,
+                                line_number):
+    """Create a location punctuality metric from the given variables."""
     district = None
 
     try:
@@ -153,9 +153,9 @@ def parse_departures(departures):
             continue
 
         try:
-            punctualities[obj['vehiclenumber']]['punctuality'] = punc
-            punctualities[obj['vehiclenumber']]['stop_code'] = stop
-            punctualities[obj['vehiclenumber']]['arrived'] = False
+            punctualities[vehicle_num]['punctuality'] = punc
+            punctualities[vehicle_num]['stop_code'] = stop
+            punctualities[vehicle_num]['arrived'] = False
 
         except KeyError:
             punctualities[obj['vehiclenumber']] = {
@@ -184,7 +184,7 @@ def parse_message(message):
 
 
 def ordered_dict_to_dict(od):
-    """ hacky way to create regular dict from ordered dict. """
+    """Hacky way to create regular dict from ordered dict."""
     return json.loads(json.dumps(od))
 
 
