@@ -12,3 +12,7 @@ In this repository we use the PEP8 coding style. If you contribute, please make 
     pip install pep8
 ```
 Then you can just use ```pep8 your_python_file.py``` in your terminal to see if your code is PEP8 compliant.
+
+## API documentation
+
+Please refer to the [wiki](https://github.com/psovea/db-server/wiki)
